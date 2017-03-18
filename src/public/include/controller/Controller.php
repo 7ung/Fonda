@@ -8,15 +8,15 @@
 
 namespace fonda\controller;
 
-use Psr\Http\Message\ResponseInterface ;
-use Psr\Http\Message\ServerRequestInterface ;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 require_once __DIR__.'/../constant.php';
 
 interface Controller
 {
 
-    function exec(ServerRequestInterface $request, ResponseInterface $response );
+    function exec(Request $request, Response $response );
     function getMethod();
     function getUrl();
 
