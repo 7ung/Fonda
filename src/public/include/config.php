@@ -8,15 +8,40 @@
 
 namespace fonda;
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '0918280427');
-define('DB_DBNAME', 'foodee');
+$ini = parse_ini_file('app.ini');
+
+define('DB_HOST', $ini['db_host']);
+define('DB_USER', $ini['db_username']);
+define('DB_PASS',  $ini['db_password']);
+define('DB_DBNAME', $ini['db_schema_name']);
 
 /**
  * Quick hash salt use for hash username
  * because username don't need to hash strongly, it need to quick verify instead.
  */
-define('QUICK_HASH_SALT', '$1$Olt2e0$');
-define('STRONG_HASH_ARGTH', PASSWORD_BCRYPT);
-define('STRONG_HASH_COST', 10);
+define('QUICK_HASH_SALT', $ini['quick_hash_salt']);
+define('STRONG_HASH_ARGTH', $ini['strong_hash_argth']);
+define('STRONG_HASH_COST', $ini['strong_hash_cost']);
+
+/**
+ * Google mail authorization config
+ */
+define('OAUTH_USER_EMAIL', $ini['oauth_user_email']);
+define('OAUTH_CLIENT_ID', $ini['oauth_client_id']);
+define('OAUTH_CLIENT_SECRET', $ini['oauth_client_secret']);
+define('OAUTH_REFRESH_TOKEN', $ini['oauth_refresh_token']);
+
+/**
+ * Mail config
+ */
+define('MAIL_AUTH_TYPE', $ini['auth_type']);
+define('MAIL_HOST', $ini['host']);
+define('MAIL_PORT', $ini['port']);
+define('MAIL_SMTP_SUCURE', $ini['smtp_sucure']);
+
+/**
+ * Mail sender
+ */
+define('MAIL_SEND_FROM', $ini['sender_email']);
+define('MAIL_SENDER_PASSWORD', $ini['password']);
+define('MAIL_SENDER_NAME', $ini['sender_name']);

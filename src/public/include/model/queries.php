@@ -9,6 +9,7 @@
 define ('SELECT_USERNAME', 'query_select_username');
 define ('CREATE_USER', 'query_create_user');
 define ('SELECT_USER_EMAIL', 'query_select_user_email');
+define('CREATE_VERIFY_CODE', 'query_create_verify_code');
 
 /**
  * List queries has 1 parameter.
@@ -23,7 +24,8 @@ const mysql_queries_1 =
         /**
          *
          */
-        SELECT_USER_EMAIL => 'select id from user WHERE email =?'
+        SELECT_USER_EMAIL => 'select id from user WHERE email =?',
+
     ];
 
 
@@ -35,5 +37,10 @@ const mysql_queries_3 =
     /**
      *
      */
-    CREATE_USER =>  'call foodee.insert_user(?, ?, ?)'
+    CREATE_USER =>  'call foodee.insert_user(?, ?, ?)',
+
+    /**
+     *
+     */
+    CREATE_VERIFY_CODE => 'insert into verify_status(user_id, code, expired) values(?, ?, ?)'
 ];

@@ -123,6 +123,12 @@ class Member
         }
     }
 
+    private function createVerifyCode($userId)
+    {
+        $stmt = $this->connection->prepare(mysql_queries_3[CREATE_USER]);
+
+    }
+
     private function hash(&$username, &$password)
     {
         //hashing password and username
