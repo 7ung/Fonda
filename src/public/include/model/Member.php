@@ -67,6 +67,9 @@ class Member extends BaseModel
         });
     }
 
+    /**
+     * @return ../entities/User mixed
+     */
     public function createUser()
     {
         //$this->refresh();
@@ -76,8 +79,9 @@ class Member extends BaseModel
             $this->user->getEmail());
         return $this->execute($stmt, function() use ($stmt)
         {
-            $stmt->close();
-            return $this->lastInsertId();
+            //$stmt->close();
+            $this->user->setId($this->lastInsertId());
+            return $this->user;
         });
 
     }

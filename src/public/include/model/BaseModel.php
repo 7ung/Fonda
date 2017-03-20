@@ -81,6 +81,14 @@ abstract class BaseModel
         }
         else
         {
+            /**
+             * todo: ai đó nói rằng.
+             * method 'store_result()' must be called and be called in correct order.
+             * Failure to observe this causes PHP/MySQLi to crash or return an erroneous value.
+             * nên nếu fail thì check lại hàm này.
+             */
+            $stmt->store_result();
+
             $rs = call_user_func($callback);
             $stmt->close();
             return $rs;

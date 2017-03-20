@@ -8,9 +8,9 @@
 
 namespace entities;
 
-
 class User
 {
+    private $id;
 
     private $username;
 
@@ -32,13 +32,37 @@ class User
     /**
      * @return mixed
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
     /**
-     * @return mixed
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return string
      */
     public function getTemporaryPassword()
     {
@@ -46,7 +70,15 @@ class User
     }
 
     /**
-     * @return mixed
+     * @param string $temporaryPassword
+     */
+    public function setTemporaryPassword($temporaryPassword)
+    {
+        $this->temporaryPassword = $temporaryPassword;
+    }
+
+    /**
+     * @return string
      */
     public function getEmail()
     {
@@ -54,10 +86,27 @@ class User
     }
 
     /**
-     * @return mixed
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return null
      */
     public function getCreatedDate()
     {
         return $this->createdDate;
     }
+
+    /**
+     * @param null $createdDate
+     */
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;
+    }
+
 }

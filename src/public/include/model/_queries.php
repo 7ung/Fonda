@@ -11,6 +11,7 @@ define ('CREATE_USER', 'query_create_user');
 define ('SELECT_USER_EMAIL', 'query_select_user_email');
 define('CREATE_VERIFY_CODE', 'query_create_verify_code');
 define('SELECT_VERIFY_STATUS_ID', 'query_select_verify_status_id');
+define('VERIFY_ACCOUNT', 'query_verify_account');
 
 define('LAST_INSERT_ID', 'last_insert_id');
 /**
@@ -39,7 +40,15 @@ const mysql_queries_1 =
         /**
          *
          */
-        SELECT_VERIFY_STATUS_ID => 'select id, user_id, expired, tried_time, status from verify_status where(id = ?)'
+        SELECT_VERIFY_STATUS_ID => 'select id, user_id, code, expired, tried_time, status from verify_status where(id = ?)'
+    ];
+
+/**
+ * List queries has 2 parameters.
+ */
+const mysql_queries_2 =
+    [
+        VERIFY_ACCOUNT => 'select COUNT(*) from verify_status where (user_id = ?, code = ?)'
     ];
 
 

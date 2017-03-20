@@ -40,8 +40,8 @@ class VerifyStatus extends ResponseJsonData
             $rs['verify_info']['id'] = $this->id;
         if ($this->userId != null)
             $rs['verify_info']['user_id'] = $this->userId;
-        if ($this->code != null)
-            $rs['verify_info']['code'] = $this->code;
+//        if ($this->code != null)
+//            $rs['verify_info']['code'] = $this->code; // not allow client view code
         if ($this->expired != null)
             $rs['verify_info']['expired'] = $this->expired;
         if ($this->triedTime != null)

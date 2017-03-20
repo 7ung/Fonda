@@ -67,6 +67,7 @@ class VerifyMember extends BaseModel
             $stmt->bind_result(
                 $_verifyStatus->id,
                 $_verifyStatus->userId,
+                $_verifyStatus->code,
                 $_verifyStatus->expired,
                 $_verifyStatus->triedTime,
                 $_verifyStatus->status);
@@ -75,6 +76,21 @@ class VerifyMember extends BaseModel
                 return $_verifyStatus;
             }
             return null;
+        });
+    }
+
+    function verify()
+    {
+        $stmt = $this->prepare(mysql_queries_2[VERIFY_ACCOUNT], 'is',
+            $this->verifyStatus->userId,
+            $this->verifyStatus->code);
+        return $this->execute($stmt, function () use ($stmt)
+        {
+             $count = 0;
+             $stmt->bind_result($count);
+             $stmt->fetch();
+             // Nếu verify đúng thì select được 1 dòng.
+             return ($count === 1);
         });
     }
 }

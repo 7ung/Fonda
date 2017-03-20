@@ -10,6 +10,15 @@ namespace fonda;
 
 $ini = parse_ini_file('app.ini');
 
+/**
+ * Common
+ */
+define('APP_NAME', $ini['app_name']);
+define('APP_VERSION', $ini['app_version']);
+
+/**
+ * Database connection
+ */
 define('DB_HOST', $ini['db_host']);
 define('DB_USER', $ini['db_username']);
 define('DB_PASS',  $ini['db_password']);
