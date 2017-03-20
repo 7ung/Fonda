@@ -6,11 +6,12 @@
  * Time: 1:42 PM
  */
 
-namespace model;
+namespace entities;
 
 
 class User
 {
+
     private $username;
 
     private $temporaryPassword;

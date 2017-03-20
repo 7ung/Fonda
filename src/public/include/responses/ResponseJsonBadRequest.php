@@ -6,7 +6,7 @@
  * Time: 3:36 PM
  */
 
-namespace interfaces;
+namespace responses;
 
 require_once __DIR__.'/ResponseJson.php';
 

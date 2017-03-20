@@ -6,7 +6,7 @@
  * Time: 3:22 PM
  */
 
-namespace interfaces;
+namespace responses;
 
 
 class ResponseJsonData implements ResponseJson

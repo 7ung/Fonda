@@ -8,10 +8,11 @@
 
 namespace fonda\controller;
 
-use common\ResponseBuilder;
-use interfaces\ResponseJsonBadRequest;
-use interfaces\ResponseJsonData;
-use interfaces\ResponseJsonError;
+use model\VerifyMember;
+use responses\ResponseBuilder;
+use responses\ResponseJsonBadRequest;
+use responses\ResponseJsonData;
+use responses\ResponseJsonError;
 use model\Member;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -22,6 +23,7 @@ require __DIR__ . '/../responses/ResponseJsonBadRequest.php';
 require __DIR__ . '/../responses/ResponseJsonData.php';
 require __DIR__ . '/../responses/ResponseBuilder.php';
 require __DIR__.'/../model/Member.php';
+require __DIR__.'/../model/VerifyMember.php';
 
 class RegisterController implements Controller
 {
@@ -59,9 +61,11 @@ class RegisterController implements Controller
             else
             {
                 // not exists user. allow to register
-                $id = $member->createUser();
+                $lastId = $member->createUser();
+                $verify = new VerifyMember($lastId);
+                $verifyInfo = $verify->createVerifyCode();
                 $response = $response = ResponseBuilder::build(
-                    new ResponseJsonData(), $response, $request, 201);
+                    $verifyInfo, $response, $request, 201);
             }
         }
         catch(ResponseJsonError $mySqlExecuteException)

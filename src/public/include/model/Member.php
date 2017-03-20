@@ -9,32 +9,32 @@
 namespace model;
 
 
+use entities\User;
 use exception\MySqlExecuteFailException;
 use fonda\db\Connection;
 
-require_once __DIR__.'/queries.php';
+require_once __DIR__ . '/_queries.php';
 require_once __DIR__.'/../exception/MySqlExecuteFailException.php';
 require_once __DIR__.'/../entities/User.php';
 require_once __DIR__.'/../db/Connection.php';
+require_once __DIR__.'/BaseModel.php';
 
-class Member
+class Member extends BaseModel
 {
 
     private $user;
 
-    private $connection;
-
     function __construct($_username, $_password, $_email)
     {
+        parent::__construct();
         $this->hash($_username, $_password);
         $this->user = new User($_username, $_password, $_email);
-        $this->connection = (new Connection())->connect();
 
     }
 
     function __destruct()
     {
-        $this->connection->close();
+        parent::__construct();
     }
 
     /**
@@ -45,87 +45,40 @@ class Member
      */
     public function checkExistsUsername()
     {
-        $stmt = $this->connection->prepare(mysql_queries_1[SELECT_USERNAME]);
-        $stmt->bind_param("s", $this->user->getUsername());
-
-        $rs = true;
-        if ($stmt->execute() == 0)
-        {
-            // execute fail
-            $error_msg = $stmt->error;
-            $stmt->close();
-            throw new MySqlExecuteFailException($error_msg);
-        }
-        else
+        $stmt = $this->prepare(mysql_queries_1[SELECT_USERNAME],"s", $this->user->getUsername());
+        return $this->execute($stmt, function () use ($stmt)
         {
             if ($stmt->fetch() == 0)
-                $rs = false;
+                return false;
             else
-                $rs = true;
-        }
-        $stmt->close();
-        return $rs;
+                return true;
+        });
     }
 
     public function checkExistsEmail()
     {
-        $stmt = $this->connection->prepare(mysql_queries_1[SELECT_USER_EMAIL]);
-        $stmt->bind_param("s", $this->user->getEmail());
-
-        $rs = true;
-        if ($stmt->execute() == 0)
-        {
-            // execute fail
-            $error_msg = $stmt->error;
-            $stmt->close();
-            throw new MySqlExecuteFailException($error_msg);
-        }
-        else
+        $stmt = $this->prepare(mysql_queries_1[SELECT_USER_EMAIL], "s", $this->user->getEmail());
+        return $this->execute($stmt, function () use ($stmt)
         {
             if ($stmt->fetch() == 0)
-                $rs = false;
+                return false;
             else
-                $rs = true;
-        }
-        $stmt->close();
-        return $rs;
+                return true;
+        });
     }
 
-
-    /**
-     * @param $username
-     * @param $pass
-     * @param $email
-     * @return integer: id of created user
-     * @throws MySqlExecuteFailException: throw if execute fail
-     */
     public function createUser()
     {
-        $stmt = $this->connection->prepare(mysql_queries_3[CREATE_USER]);
-        $stmt->bind_param("sss",
+        //$this->refresh();
+        $stmt = $this->prepare(mysql_queries_3[CREATE_USER], "sss",
             $this->user->getUsername(),
             $this->user->getTemporaryPassword(),
             $this->user->getEmail());
-
-        if ($stmt->execute() == 0)
+        return $this->execute($stmt, function() use ($stmt)
         {
-            // execute error
-            $error_msg = $stmt->error;
             $stmt->close();
-            throw new MySqlExecuteFailException($error_msg);
-        }
-        else
-        {
-            // todo: send email verify
-            $lastId = $this->connection->insert_id;
-            $stmt->close();
-            return $lastId;
-        }
-    }
-
-    private function createVerifyCode($userId)
-    {
-        $stmt = $this->connection->prepare(mysql_queries_3[CREATE_USER]);
+            return $this->lastInsertId();
+        });
 
     }
 

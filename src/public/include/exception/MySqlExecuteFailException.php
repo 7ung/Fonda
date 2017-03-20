@@ -9,7 +9,7 @@
 namespace exception;
 
 
-use interfaces\ResponseJsonError;
+use responses\ResponseJsonError;
 
 require_once __DIR__ . '/../responses/ResponseJsonError.php';
 

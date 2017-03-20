@@ -6,7 +6,7 @@
  * Time: 2:34 PM
  */
 
-namespace interfaces;
+namespace responses;
 
 use Exception;
 

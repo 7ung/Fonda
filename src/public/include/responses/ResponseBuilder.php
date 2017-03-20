@@ -6,13 +6,13 @@
  * Time: 2:28 PM
  */
 
-namespace common;
+namespace responses;
 
 
-use interfaces\ResponseJson;
-use interfaces\ResponseJsonBadRequest;
-use interfaces\ResponseJsonData;
-use interfaces\ResponseJsonError;
+use responses\ResponseJson;
+use responses\ResponseJsonBadRequest;
+use responses\ResponseJsonData;
+use responses\ResponseJsonError;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

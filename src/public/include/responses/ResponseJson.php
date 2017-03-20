@@ -6,7 +6,7 @@
  * Time: 9:09 PM
  */
 
-namespace interfaces;
+namespace responses;
 
 
 interface ResponseJson
