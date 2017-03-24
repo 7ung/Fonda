@@ -7,13 +7,14 @@
  */
 use fonda\controller\RegisterController;
 use fonda\controller\TestController;
+use fonda\controller\VerifyAccountController;
 use fonda\Program;
 
 require_once ('include/Program.php');
-require_once ('include/controller/RegisterController.php');
-require_once ('include/controller/TestController.php');
+require_once ('include/controller/_loader.php');
 
 $program = Program::instance();
 $program->registerHandler(new RegisterController());
 $program->registerHandler(new TestController());
+$program->registerHandler(new VerifyAccountController());
 $program->start();

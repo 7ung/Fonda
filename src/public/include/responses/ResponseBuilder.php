@@ -16,7 +16,7 @@ use responses\ResponseJsonError;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-require_once __DIR__ . '/../constant.php';
+require_once 'ResponseJson.php';
 
 class ResponseBuilder
 {
@@ -28,7 +28,7 @@ class ResponseBuilder
         $responseJsonArray[STATUS] = $statusCode;
         $responseJsonArray[METHOD] = static::getRoute($request);
 
-        if ( $data->serializableArray() == null)
+        if ( $data === null || $data->serializableArray() == null)
             return $response->withJson($responseJsonArray, $statusCode);
 
         if ($data instanceof ResponseJsonData){

@@ -8,9 +8,9 @@
 
 namespace common;
 
-require __DIR__.'/../../../vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
+require_once __DIR__.'/../../../vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
 require_once __DIR__.'/../config.php';
-require __DIR__.'/mail_template.php';
+require_once __DIR__.'/mail_template.php';
 
 class SimpleMailSender
 {

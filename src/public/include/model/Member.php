@@ -13,10 +13,6 @@ use entities\User;
 use exception\MySqlExecuteFailException;
 use fonda\db\Connection;
 
-require_once __DIR__ . '/_queries.php';
-require_once __DIR__.'/../exception/MySqlExecuteFailException.php';
-require_once __DIR__.'/../entities/User.php';
-require_once __DIR__.'/../db/Connection.php';
 require_once __DIR__.'/BaseModel.php';
 
 class Member extends BaseModel
@@ -92,4 +88,5 @@ class Member extends BaseModel
         $password = \common\strong_hashing($password);
         $username = \common\quick_hashing($username);
     }
+
 }

@@ -2,8 +2,8 @@
 /**
  * Created by DoAnChuyenNganhTeam
  * User: TungHH
- * Date: 03/18/2017
- * Time: 2:40 PM
+ * Date: 03/24/2017
+ * Time: 10:36 PM
  */
 
 namespace exception;
@@ -13,13 +13,13 @@ use responses\ResponseJsonError;
 
 require_once __DIR__.'/../responses/_loader.php';
 
-class MySqlExecuteFailException extends ResponseJsonError
+class InvalidArgumentException extends ResponseJsonError
 {
     private $error;
 
     function __construct($errorDetail)
     {
-        parent::__construct('MySQL query cannot be executed');
+        parent::__construct('Invalid requested params', 404);
         $this->error = $errorDetail;
     }
 

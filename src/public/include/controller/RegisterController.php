@@ -19,16 +19,9 @@ use entities\User;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-require __DIR__.'/Controller.php';
-require __DIR__ .'/../exception/MySqlExecuteFailException.php';
-require __DIR__ . '/../responses/ResponseJsonBadRequest.php';
-require __DIR__ . '/../responses/ResponseJsonData.php';
-require __DIR__ . '/../responses/ResponseBuilder.php';
-require __DIR__.'/../model/Member.php';
-require __DIR__.'/../model/VerifyMember.php';
-require __DIR__.'/../common/SimpleMailSender.php';
+require_once 'Controller.php';
 
-class RegisterController implements Controller
+class RegisterController extends Controller
 {
 
     function getMethod(){
@@ -45,10 +38,16 @@ class RegisterController implements Controller
         $password = $request->getParsedBody()['password'];
         $email = $request->getParsedBody()['email'];
 
-        $member = new Member($username, $password, $email);
-
         try
         {
+            // assert parameters not null
+            $this->assertNotNullParams($username, 'User name must not empty');
+            $this->assertNotNullParams($password, 'Password must not empty');
+            $this->assertNotNullParams($email, 'Email must not empty');
+
+            $member = new Member($username, $password, $email);
+
+            //
             if ($member->checkExistsUsername() == true)
             {
                 $response = ResponseBuilder::build(
@@ -89,13 +88,13 @@ class RegisterController implements Controller
                 /**
                  * Apply Response
                  */
-                $response = $response = ResponseBuilder::build(
+                $response = ResponseBuilder::build(
                     $verifyInfo, $response, $request, 201);
             }
         }
-        catch(ResponseJsonError $mySqlExecuteException)
+        catch(ResponseJsonError $jsonError)
         {
-            $response = ResponseBuilder::build($mySqlExecuteException, $response, $request, 500);
+            $response = ResponseBuilder::build($jsonError, $response, $request, 500);
         }
 
         return $response;

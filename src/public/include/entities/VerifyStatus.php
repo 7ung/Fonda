@@ -8,24 +8,23 @@
 
 namespace entities;
 
-
 use responses\ResponseJsonData;
 
 class VerifyStatus extends ResponseJsonData
 {
-    public $id;
+    public $id = -1;
 
-    public $userId;
+    public $userId = -1;
 
-    public $code;
+    public $code = null;
 
-    public $expired;
+    public $expired = -1;
 
-    public $triedTime;
+    public $triedTime = -1;
 
-    public $status;
+    public $status = -1;
 
-    public $user;
+    public $user = null;
 
     function __construct()
     {
@@ -36,17 +35,17 @@ class VerifyStatus extends ResponseJsonData
         $rs = array(
             'verify_info' => array()
         );
-        if ($this->id != null)
+        if ($this->id !== -1)
             $rs['verify_info']['id'] = $this->id;
-        if ($this->userId != null)
+        if ($this->userId !== -1)
             $rs['verify_info']['user_id'] = $this->userId;
 //        if ($this->code != null)
 //            $rs['verify_info']['code'] = $this->code; // not allow client view code
-        if ($this->expired != null)
+        if ($this->expired !== -1)
             $rs['verify_info']['expired'] = $this->expired;
-        if ($this->triedTime != null)
+        if ($this->triedTime !== -1)
             $rs['verify_info']['tried_time'] = $this->triedTime;
-        if ($this->status != null)
+        if ($this->status !== -1)
             $rs['verify_info']['status'] = $this->status;
         return $rs;
     }

@@ -16,15 +16,13 @@ use model\VerifyMember;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-require_once __DIR__.'/../common/hashing.php';
-require_once __DIR__.'/../model/VerifyMember.php';
-require_once __DIR__.'/../common/SimpleMailSender.php';
+require_once 'Controller.php';
 
 /**
  * Class TestController: Test every thing here
  * @package fonda\controller
  */
-class TestController implements Controller
+class TestController extends Controller
 {
 
     function getMethod()

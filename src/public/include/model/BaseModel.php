@@ -13,7 +13,9 @@ use fonda\db\Connection;
 use mysqli_stmt;
 
 require_once __DIR__.'/../db/Connection.php';
-
+require_once __DIR__.'/../entities/_loader.php';
+require_once __DIR__.'/../exception/_loader.php';
+require_once __DIR__ . '/_queries.php';
 
 abstract class BaseModel
 {
@@ -112,4 +114,5 @@ abstract class BaseModel
             return $rs;
         });
     }
+
 }
