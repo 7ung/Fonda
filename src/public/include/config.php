@@ -8,7 +8,7 @@
 
 namespace fonda;
 
-$ini = parse_ini_file('app.ini');
+$ini = parse_ini_file(__DIR__.'/../app.ini');
 
 /**
  * Common
@@ -54,3 +54,6 @@ define('MAIL_SMTP_SUCURE', $ini['smtp_sucure']);
 define('MAIL_SEND_FROM', $ini['sender_email']);
 define('MAIL_SENDER_PASSWORD', $ini['password']);
 define('MAIL_SENDER_NAME', $ini['sender_name']);
+
+// secure string token
+define('SECURE_STRING_TOKEN', $ini['secure_string']);

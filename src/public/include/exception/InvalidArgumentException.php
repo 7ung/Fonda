@@ -17,9 +17,9 @@ class InvalidArgumentException extends ResponseJsonError
 {
     private $error;
 
-    function __construct($errorDetail)
+    function __construct($errorDetail, $code)
     {
-        parent::__construct('Invalid requested params', 404);
+        parent::__construct('Invalid requested params', $code);
         $this->error = $errorDetail;
     }
 

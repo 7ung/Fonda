@@ -10,15 +10,15 @@ namespace entities;
 
 class User
 {
-    private $id;
+    public $id;
 
-    private $username;
+    public $username;
 
-    private $temporaryPassword;
+    public $temporaryPassword;
 
-    private $email;
+    public $email;
 
-    private $createdDate;
+    public $createdDate;
 
     function __construct($_username= '', $_password = '', $_email = '', $_createDate = null)
     {

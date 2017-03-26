@@ -112,7 +112,8 @@ class VerifyMember extends BaseModel
             $this->verifyStatus->code);
         return $this->execute($stmt, function () use ($stmt)
         {
-            assert($stmt->affected_rows == 0, new InvalidArgumentException("User not found."));
+            if ($stmt->affected_rows == 0)
+                throw new InvalidArgumentException("User not found.", 404);
 
             $rs = 0;
             $stmt->bind_result($count);

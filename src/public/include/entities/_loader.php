@@ -7,3 +7,4 @@
  */
 require 'User.php';
 require 'VerifyStatus.php';
+require 'Token.php';

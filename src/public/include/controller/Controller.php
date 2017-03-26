@@ -20,6 +20,7 @@ require_once __DIR__.'/../common/_loader.php';
 
 abstract class Controller
 {
+
     abstract function getMethod();
     abstract function getUrl();
     abstract function exec(Request $request, Response $response );
@@ -27,6 +28,6 @@ abstract class Controller
     protected function assertNotNullParams(&$var, $message)
     {
         if ($var == null)
-            throw new InvalidArgumentException($message);
+            throw new InvalidArgumentException($message, 400);
     }
 }

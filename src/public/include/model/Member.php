@@ -9,6 +9,7 @@
 namespace model;
 
 
+use function common\generateToken;
 use entities\User;
 use exception\MySqlExecuteFailException;
 use fonda\db\Connection;
@@ -20,7 +21,7 @@ class Member extends BaseModel
 
     private $user;
 
-    function __construct($_username, $_password, $_email)
+    function __construct($_username, $_password, $_email = '')
     {
         parent::__construct();
         $this->hash($_username, $_password);
@@ -88,5 +89,25 @@ class Member extends BaseModel
         $password = \common\strong_hashing($password);
         $username = \common\quick_hashing($username);
     }
+
+    public function login()
+    {
+        $stmt = $this->prepare(mysql_queries_2[LOGIN_ACCOUNT], "ss",
+            'QoG8fvo81l/s6pAsaOij/',
+            '$2y$10$AiaIOQGXi/RR/1/7509JKuDwGHJHgXzo20ZVwO5WSg9zHW2XMpZSO');
+        return $this->execute($stmt, function() use ($stmt)
+        {
+            $rs = -1;
+            $stmt->bind_result($rs);
+            $stmt->fetch();
+            /*
+             * rs = 1 nếu login thành công
+             * rs = 0 nếu login fail
+             */
+            return $rs;
+        });
+    }
+
+
 
 }

@@ -9,7 +9,9 @@
 namespace fonda\controller;
 
 
+use function common\generateToken;
 use function common\quick_hashing;
+use function common\randString;
 use common\SimpleMailSender;
 use function common\verify_quick_hash;
 use model\VerifyMember;
@@ -37,8 +39,8 @@ class TestController extends Controller
 
     function exec(Request $request, Response $response)
     {
-        $mailSender = new SimpleMailSender();
-//        $body = mail_template['verify_code_required'][MAIL_BODY];
+        echo generateToken(67);
+        //        $body = mail_template['verify_code_required'][MAIL_BODY];
 //        if ($mailSender->sendEmail('hohoangtung12a3@gmail.com',
 //            mail_template['verify_code_required'][MAIL_SUBJECT],
 //            ))

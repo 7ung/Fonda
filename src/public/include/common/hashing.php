@@ -10,6 +10,8 @@ namespace common;
 
 require_once __DIR__.'/../config.php';
 
+const alphabet ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
 function quick_hashing($str)
 {
     $hashedStr = crypt($str, QUICK_HASH_SALT);
@@ -29,4 +31,20 @@ function strong_hashing($str)
 function verify_string($string, $hashedString)
 {
     return password_verify($string, $hashedString);
+}
+
+function generateToken($userId)
+{
+    $fullString = $userId.SECURE_STRING_TOKEN.randString(8);
+    return strong_hashing($fullString);
+}
+
+function randString($length)
+{
+    $rs = array();
+    for ($i = 0; $i < $length; $i++)
+    {
+        array_push($rs, alphabet[random_int(0, 61)]);
+    }
+    return implode('', $rs);
 }
