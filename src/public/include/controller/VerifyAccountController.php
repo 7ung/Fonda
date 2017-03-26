@@ -10,6 +10,7 @@ namespace fonda\controller;
 
 use model\VerifyMember;
 use responses\ResponseBuilder;
+use responses\ResponseJsonBadRequest;
 use responses\ResponseJsonError;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -41,16 +42,25 @@ class VerifyAccountController extends Controller
 
             $verifyMember = new VerifyMember($userId, $code);
 
+            /* Kiêm tra thông tin verify */
             $rs = $verifyMember->verify();
-            $status = 0;
-            if ($rs == 0)
-                $status = 200;
-            else
-                $status = 202;
-            $verifyStatus = $verifyMember->getVerifyStatusByUserId($userId);
 
-            $response = ResponseBuilder::build(
-                $verifyStatus, $response, $request, $status);
+            if ($rs == -1){
+                /* Verify fail, username not exists */
+                $response = ResponseBuilder::build(
+                    new ResponseJsonBadRequest('Username not found', 40401),
+                    $response, $request, 404);
+            }
+            else {
+                if ($rs == 0)
+                    $status = 200;
+                else
+                    $status = 202;
+                $verifyStatus = $verifyMember->getVerifyStatusByUserId($userId);
+
+                $response = ResponseBuilder::build(
+                    $verifyStatus, $response, $request, $status);
+            }
         }
         catch(ResponseJsonError $jsonError)
         {

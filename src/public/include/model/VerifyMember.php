@@ -77,6 +77,10 @@ class VerifyMember extends BaseModel
         });
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
     function getVerifyStatusByUserId($userId)
     {
         $stmt = $this->prepare(mysql_queries_1[SELECT_VERIFY_STATUS_USERID], 'i', $userId);
@@ -113,8 +117,7 @@ class VerifyMember extends BaseModel
         return $this->execute($stmt, function () use ($stmt)
         {
             if ($stmt->affected_rows == 0)
-                throw new InvalidArgumentException("User not found.", 404);
-
+                return -1;
             $rs = 0;
             $stmt->bind_result($count);
             $stmt->fetch();
