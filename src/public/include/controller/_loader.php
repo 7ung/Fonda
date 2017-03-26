@@ -11,3 +11,4 @@ require 'RegisterController.php';
 require 'TestController.php';
 require 'VerifyAccountController.php';
 require 'LoginController.php';
+require 'ResendPasswordController.php';

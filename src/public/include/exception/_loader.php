@@ -8,4 +8,4 @@
 
 require 'InvalidArgumentException.php';
 require 'MySqlExecuteFailException.php';
-
+require 'MailSenderException.php';

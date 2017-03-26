@@ -9,6 +9,7 @@
 namespace fonda\controller;
 
 use common\SimpleMailSender;
+use exception\MailSenderException;
 use model\VerifyMember;
 use responses\ResponseBuilder;
 use responses\ResponseJsonBadRequest;
@@ -81,9 +82,15 @@ class RegisterController extends Controller
                 $mailSender = new SimpleMailSender();
                 $body = mail_template['verify_code_required'][MAIL_BODY];
                 $body = str_replace('{?}', $verifyInfo->code, $body);
-                $mailSender->sendEmail($user->getEmail(),
-                    mail_template['verify_code_required'][MAIL_SUBJECT],
-                    $body);
+
+                try {
+                    $mailSender->sendEmail($user->getEmail(),
+                        mail_template['verify_code_required'][MAIL_SUBJECT],
+                        $body);
+                }
+                catch (\Exception $e){
+                    throw new MailSenderException($e->getMessage(), 500);
+                }
 
                 /**
                  * Apply Response

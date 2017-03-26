@@ -19,6 +19,10 @@ const mail_template =
             [
                 MAIL_SUBJECT    => APP_NAME.' - Verify your account',
                 MAIL_BODY       => 'Your code: {?}'
+            ],
+        'resend_password' =>
+            [
+                MAIL_SUBJECT    => APP_NAME.' - Renew password account',
+                MAIL_BODY       => 'Your password {?}'
             ]
-
     ];

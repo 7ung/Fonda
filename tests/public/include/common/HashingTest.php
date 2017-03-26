@@ -15,4 +15,9 @@ class HashingTest extends PHPUnit_Framework_TestCase
     {
         echo \common\strong_hashing('121212');
     }
+
+    function test_randString()
+    {
+        echo \common\randString(12);
+    }
 }

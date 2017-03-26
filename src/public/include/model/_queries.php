@@ -18,6 +18,8 @@ define('LOGIN_ACCOUNT', 'query_login_account');
 define('CREATE_ACCESS_TOKEN', 'query_create_access_token');
 define('SELECT_ACCESS_TOKEN_USERID', 'query_select_access_token_userid');
 define('GET_ACCOUNT_INFO', 'query_get_account_info');
+define('UPDATE_USER_USERNAME_PASSWORD', 'query_update_user_username_password');
+
 /**
  *
  */
@@ -77,6 +79,7 @@ const mysql_queries_2 =
          *
          */
         LOGIN_ACCOUNT => 'call foodee.login(?, ?)'
+
     ];
 
 
@@ -98,6 +101,11 @@ const mysql_queries_3 =
     /*
      *
      */
-    CREATE_ACCESS_TOKEN => 'call foodee.create_token(?, ?, ?)'
+    CREATE_ACCESS_TOKEN => 'call foodee.create_token(?, ?, ?)',
+
+    /**
+     *
+     */
+    UPDATE_USER_USERNAME_PASSWORD => 'update user set password = ? where (username = ? and email = ?)'
 
 ];

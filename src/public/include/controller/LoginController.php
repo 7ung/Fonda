@@ -51,44 +51,42 @@ class LoginController extends Controller
                     new ResponseJsonBadRequest('Username or password wrong', 40101),
                     $response, $request, 401
                 );
+                return $response;
             }
-            else {
-                /* User name correct */
-                /* Check status account, if account has not active, not allow login*/
-                $verifyMember = new VerifyMember($token->user->id);
-                $verifyStatus = $verifyMember->getVerifyStatusByUserId($token->user->id);
-                if ($verifyStatus->status != 3){
-                    $response = ResponseBuilder::build(
-                        new ResponseJsonBadRequest('Account has not active', 40102),
-                        $response, $request, 401
-                    );
-                }
-                else {
-                    /* Account is good status */
-                    /* Check password, if wrong password, not allow login.*/
-                    $correct = \common\verify_string($password, $token->user->temporaryPassword);
-                    if ($correct == false){
-                        $response = ResponseBuilder::build(
-                            new ResponseJsonBadRequest('Username or password wrong', 40101),
-                            $response, $request, 401
-                        );
-                    }
-                    else
-                    {
-                        /* Password is correct */
-                        /* Create token*/
-                        $token->id = $accessToken->createToken($token->user->id);
 
-                        /* if token created, get token info  */
-                        if ($token->id == 0)
-                            throw new InvalidArgumentException('Some unexpected error', 500);
-                        $accessToken->getToken($token);
-                        $response = ResponseBuilder::build($token, $response, $request, 200);
+            /* User name correct */
+            /* Check status account, if account has not active, not allow login*/
+            $verifyMember = new VerifyMember($token->user->id);
+            $verifyStatus = $verifyMember->getVerifyStatusByUserId($token->user->id);
 
-                    }
-                }
-
+            if ($verifyStatus->status != 3){
+                $response = ResponseBuilder::build(
+                    new ResponseJsonBadRequest('Account has not active', 40102),
+                    $response, $request, 401
+                );
+                return $response;
             }
+
+            /* Account is good status */
+            /* Check password, if wrong password, not allow login.*/
+            $correct = \common\verify_string($password, $token->user->temporaryPassword);
+            if ($correct == false){
+                $response = ResponseBuilder::build(
+                    new ResponseJsonBadRequest('Username or password wrong', 40101),
+                    $response, $request, 401
+                );
+                return $response;
+            }
+
+            /* Password is correct */
+            /* Create token*/
+            $token->id = $accessToken->createToken($token->user->id);
+
+            /* if token created, get token info  */
+            if ($token->id == 0)
+                throw new InvalidArgumentException('Some unexpected error', 500);
+            $accessToken->getToken($token);
+            $response = ResponseBuilder::build($token, $response, $request, 200);
 
         }
         catch(ResponseJsonError $jsonError)

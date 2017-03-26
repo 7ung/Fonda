@@ -108,6 +108,21 @@ class Member extends BaseModel
         });
     }
 
+    public function updatePassword($newPassword)
+    {
+        $this->user->temporaryPassword = \common\strong_hashing($newPassword);
+        $stmt = $this->prepare(mysql_queries_3[UPDATE_USER_USERNAME_PASSWORD], 'sss',
+            $this->user->temporaryPassword,
+            $this->user->username,
+            $this->user->email);
+        return $this->execute($stmt, function () use ($stmt)
+        {
+            if ($stmt->affected_rows == 0)
+                return 0;
+            else
+                return 1;
+        });
+    }
 
 
 }
