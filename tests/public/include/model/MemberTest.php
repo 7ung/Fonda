@@ -21,11 +21,30 @@ class MemberTest extends TestCase
 {
 
 
-    function testLoginSuccess()
-    {
-        $username = '121212';
-        $password = '121212';
-        $member = new Member($username, $password);
-        $this->assertNotEquals(0, $member->login());
+    function testCreateUser(){
+        $username = '12112';
+        $password = '121';
+        $email = 'hghghgh@hh';
+        $member = new Member($username, $password, $email);
+        $this->assertNotNull($member->createUser());
+
     }
+
+    function test_findUserByUsername(){
+        $username = 'tunghh';
+        $password = '';// don't care
+        $member = new Member($username, $password);
+        $this->assertNotNull($member->findUserByUsername());
+    }
+
+    function test__(){
+        $username = 'tunghh';
+        $password = '';// don't care
+        $member = new Member($username, $password);
+        $user = $member->findUserByUsername();
+        $this->assertEquals(true, \common\verify_string('123456', $user->temporaryPassword));
+
+    }
+
+
 }

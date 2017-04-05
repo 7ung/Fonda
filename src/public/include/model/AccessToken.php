@@ -41,16 +41,17 @@ class AccessToken extends BaseModel
      */
     public function getAccessToken()
     {
-        $token = $this->getInfo();
+        //$token;
+        $user = $this->findUserByUsername();
 
-        if ($token == null)
+        if ($user == null)
             throw new InvalidArgumentException('User name or password wrong', 401);
 
 //        if ($this->isActive($token->user->id) == false)
 //            throw new InvalidArgumentException('', 401); // todo
 
         /* username correct => check password*/
-        $correct = \common\verify_string($this->password, $token->user->temporaryPassword);
+        $correct = \common\verify_string($this->password, $user->temporaryPassword);
 
         if ($correct === false){
             /* password incorrect => throw exception*/
@@ -58,6 +59,8 @@ class AccessToken extends BaseModel
 
         }
         else{
+
+
             /* password correct => create token => if token exists, update, if not, create new*/
             $token->id = $this->createToken($token->user->id);
 
@@ -66,28 +69,30 @@ class AccessToken extends BaseModel
                 throw new MySqlExecuteFailException('Can not create token', 400);
 
             /* if token creation success, get token info*/
-            return $this->getToken($token);
+            return $this->findTokenById($token);
 
         }
 
     }
 
-    /**
-     * @return mixed tamparate token
-     */
-    public function getInfo()
-    {
-        $stmt = $this->prepare(mysql_queries_1[GET_ACCOUNT_INFO], 's', $this->username);
-        return $this->execute($stmt, function () use ($stmt)
-        {
-            $token = new Token();
-            $token->user = new User();
-            $stmt->bind_result($token->user->id, $token->user->username, $token->user->temporaryPassword);
-            if ($stmt->fetch())
-                return $token;
-            return null;
-        });
-    }
+//    /**
+//     * @return mixed tamparate token
+//     */
+//    public function findUserByUsername()
+//    {
+//        $stmt = $this->prepare(User::$queries['findByUsername'], 's', $this->username);
+//        return $this->execute($stmt, function () use ($stmt)
+//        {
+////            $token = new Token();
+//            $user = new User();
+//            $stmt->bind_result($user->id, $user->username, $user->temporaryPassword,
+//                $user->email, $user->userRoleId, $user->createdDate);
+//
+//            if ($stmt->fetch())
+//                return $user;
+//            return null;
+//        });
+//    }
 
     /**
      * If token is created, update this token, if not, create new token
@@ -96,20 +101,16 @@ class AccessToken extends BaseModel
      */
     public function createToken($userId)
     {
-        $token = generateToken($userId);
-        $stmt = $this->prepare(mysql_queries_3[CREATE_ACCESS_TOKEN], "ssi",
-            $userId,
-            $token,
-            -1); // -1 meaning none
+        $tokenString = generateToken($userId);
+        $stmt = $this->prepare(Token::$queries['create'], "sii",
+            $tokenString,
+            -1,
+            $userId); // -1 meaning none
         return $this->execute($stmt, function() use ($stmt, $userId)
         {
-            if ($stmt->affected_rows == 0)
-                throw new MySqlExecuteFailException('Something wrong, can not create token, check user id = '.$userId);
-            $rs = null;
-            $stmt->bind_result($rs);
-            if ($stmt->fetch())
-                return $rs;
-            return 0;
+//            if ($stmt->affected_rows == 0)
+//                throw new MySqlExecuteFailException('Something wrong, can not create token, check user id = '.$userId);
+
         });
     }
 
@@ -117,9 +118,9 @@ class AccessToken extends BaseModel
      * @param Token $token origin token info
      * @return mixed retrieved token info
      */
-    public function getToken(Token &$token)
+    public function findTokenById(Token &$token)
     {
-        $stmt = $this->prepare(mysql_queries_1[SELECT_ACCESS_TOKEN_USERID], "i",
+        $stmt = $this->prepare(mysql_queries_1[SELECT_ACCESS_TOKEN_ID], "i",
             $token->id);
         return $this->execute($stmt, function() use ($stmt, &$token)
         {
@@ -130,6 +131,27 @@ class AccessToken extends BaseModel
                 return $token;
             else
                 return null;
+        });
+    }
+
+    /**
+     * return token found by user id, return null if not found.
+     * @param $userId
+     * @return mixed
+     */
+    public function findTokenByUserId($userId )
+    {
+        $stmt = $this->prepare(Token::$queries['findByUserId'], 'i', $userId);
+
+        return $this->execute($stmt, function () use ($stmt)
+        {
+           if ($stmt->affected_rows == 0)
+               return null;
+           $token = new Token();
+           $stmt->bind_result($token->id, $token->token, $token->expired, $token->userId);
+           if ($stmt->fetch())
+               return $token;
+           return null;
         });
     }
 

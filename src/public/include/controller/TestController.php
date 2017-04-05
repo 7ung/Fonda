@@ -39,7 +39,8 @@ class TestController extends Controller
 
     function exec(Request $request, Response $response)
     {
-        echo generateToken(67);
+        echo $_SERVER['REQUEST_TIME'];
+        //echo generateToken(67);
         //        $body = mail_template['verify_code_required'][MAIL_BODY];
 //        if ($mailSender->sendEmail('hohoangtung12a3@gmail.com',
 //            mail_template['verify_code_required'][MAIL_SUBJECT],

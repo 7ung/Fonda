@@ -24,6 +24,7 @@ require_once 'Controller.php';
 class LoginController extends Controller
 {
 
+
     function getMethod()
     {
         return [POST];
@@ -42,10 +43,11 @@ class LoginController extends Controller
             $this->assertNotNullParams($username, 'User name must not empty');
             $this->assertNotNullParams($password, 'Password must not empty');
 
-            /* Get basic token info */
-            $accessToken = new AccessToken($username, $password);
-            $token = $accessToken->getInfo();
-            if ($token == null) {
+            /* Get user info */
+            $member = new Member($username, $password);
+            $user = $member->findUserByUsername();
+
+            if ($user == null) {
                 /* User name incorrect */
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Username or password wrong', 40101),
@@ -56,8 +58,8 @@ class LoginController extends Controller
 
             /* User name correct */
             /* Check status account, if account has not active, not allow login*/
-            $verifyMember = new VerifyMember($token->user->id);
-            $verifyStatus = $verifyMember->getVerifyStatusByUserId($token->user->id);
+            $verifyMember = new VerifyMember($user->id);
+            $verifyStatus = $verifyMember->findVerifyStatusByUserId($user->id);
 
             if ($verifyStatus->status != 3){
                 $response = ResponseBuilder::build(
@@ -69,7 +71,7 @@ class LoginController extends Controller
 
             /* Account is good status */
             /* Check password, if wrong password, not allow login.*/
-            $correct = \common\verify_string($password, $token->user->temporaryPassword);
+            $correct = \common\verify_string($password, $user->temporaryPassword);
             if ($correct == false){
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Username or password wrong', 40101),
@@ -78,15 +80,17 @@ class LoginController extends Controller
                 return $response;
             }
 
-            /* Password is correct */
-            /* Create token*/
-            $token->id = $accessToken->createToken($token->user->id);
+            $accessToken = new AccessToken($username, $password);
 
-            /* if token created, get token info  */
-            if ($token->id == 0)
-                throw new InvalidArgumentException('Some unexpected error', 500);
-            $accessToken->getToken($token);
-            $response = ResponseBuilder::build($token, $response, $request, 200);
+            /*Kiểm tra có tồn tại token chưa. nếu có thì trả về token. nếu chưa thì tạo token*/
+            $token = $accessToken->findTokenByUserId($user->id);
+            if ($token == null){
+                // chưa tồn tại token
+                $accessToken->createToken($user->id);
+                $token = $accessToken->findTokenByUserId($user->id);
+            }
+
+            return ($response = ResponseBuilder::build($token, $response, $request, 200));
 
         }
         catch(ResponseJsonError $jsonError)

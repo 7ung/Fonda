@@ -10,6 +10,13 @@ namespace entities;
 
 class User
 {
+    /**
+     * Account for test:
+     * username: tunghh
+     * password 123456
+     * DO NOT delete this user
+     */
+
     public $id;
 
     public $username;
@@ -18,7 +25,14 @@ class User
 
     public $email;
 
+    public $userRoleId;
+
     public $createdDate;
+
+    public static $queries = [
+        'insert' => 'insert into user(username, password, email, created_date) values(?, ?, ?, ?)',
+        'findByUsername' => 'select id, username, password, email, user_role_id, created_date from user where (username = ?)'
+    ];
 
     function __construct($_username= '', $_password = '', $_email = '', $_createDate = null)
     {

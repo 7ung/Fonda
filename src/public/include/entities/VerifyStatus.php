@@ -12,6 +12,9 @@ use responses\ResponseJsonData;
 
 class VerifyStatus extends ResponseJsonData
 {
+    public static $queries = [
+        'save' => 'update verify_status set code = ?, expired = ?, tried_time = ?, status = ?'
+    ];
     public $id = -1;
 
     public $userId = -1;
@@ -25,6 +28,7 @@ class VerifyStatus extends ResponseJsonData
     public $status = -1;
 
     public $user = null;
+
 
     function __construct()
     {

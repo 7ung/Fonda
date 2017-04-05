@@ -16,7 +16,7 @@ define('VERIFY_ACCOUNT', 'query_verify_account');
 define('LAST_INSERT_ID', 'last_insert_id');
 define('LOGIN_ACCOUNT', 'query_login_account');
 define('CREATE_ACCESS_TOKEN', 'query_create_access_token');
-define('SELECT_ACCESS_TOKEN_USERID', 'query_select_access_token_userid');
+define('SELECT_ACCESS_TOKEN_ID', 'query_select_access_token_userid');
 define('GET_ACCOUNT_INFO', 'query_get_account_info');
 define('UPDATE_USER_USERNAME_PASSWORD', 'query_update_user_username_password');
 
@@ -56,7 +56,7 @@ const mysql_queries_1 =
         /*
          *
          */
-        SELECT_ACCESS_TOKEN_USERID => 'select id, user_id, access_token, expired from access_token where (id = ?)',
+        SELECT_ACCESS_TOKEN_ID => 'select id, user_id, access_token, expired from access_token where (id = ?)',
 
         /**
          *
@@ -75,10 +75,6 @@ const mysql_queries_2 =
          */
         VERIFY_ACCOUNT => 'call foodee.verify_account(?, ?)',
 
-        /*
-         *
-         */
-        LOGIN_ACCOUNT => 'call foodee.login(?, ?)'
 
     ];
 
@@ -88,20 +84,12 @@ const mysql_queries_2 =
  */
 const mysql_queries_3 =
 [
-    /**
-     *
-     */
-    CREATE_USER =>  'call foodee.insert_user(?, ?, ?)',
 
     /**
      *
      */
     CREATE_VERIFY_CODE => 'insert into verify_status(user_id, code, expired) values(?, ?, ?)',
 
-    /*
-     *
-     */
-    CREATE_ACCESS_TOKEN => 'call foodee.create_token(?, ?, ?)',
 
     /**
      *
@@ -109,3 +97,4 @@ const mysql_queries_3 =
     UPDATE_USER_USERNAME_PASSWORD => 'update user set password = ? where (username = ? and email = ?)'
 
 ];
+

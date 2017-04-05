@@ -43,24 +43,64 @@ class VerifyAccountController extends Controller
             $verifyMember = new VerifyMember($userId, $code);
 
             /* Kiêm tra thông tin verify */
-            $rs = $verifyMember->verify();
 
-            if ($rs == -1){
-                /* Verify fail, username not exists */
+            $verifyStatus = $verifyMember->findVerifyStatusByUserId($userId);
+            if ($verifyStatus == null){
+                // Sai user id
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Username not found', 40401),
                     $response, $request, 404);
+                return $response;
             }
-            else {
-                if ($rs == 0)
-                    $status = 200;
-                else
-                    $status = 202;
-                $verifyStatus = $verifyMember->getVerifyStatusByUserId($userId);
 
-                $response = ResponseBuilder::build(
-                    $verifyStatus, $response, $request, $status);
+            if ($verifyStatus->expired < $_SERVER['REQUEST_TIME']){
+                $verifyStatus->status = 2;
+                $verifyMember->save($verifyStatus);
             }
+
+            if ($verifyStatus->status == 2 || $verifyStatus->status == 3){
+                $response = ResponseBuilder::build(
+                    $verifyStatus, $response, $request, 202);
+                return $response;
+            }
+
+            if ($verifyStatus->status == 1 && $verifyStatus->code == $code
+                && $verifyStatus->expired > $_SERVER['REQUEST_TIME'] && $verifyStatus->triedTime < 3){
+                $verifyStatus->status = 3;
+                $verifyMember->save($verifyStatus);
+                $response = ResponseBuilder::build(
+                    $verifyStatus, $response, $request, 200);
+                return $response;
+            }
+
+
+            // hết hạn hoặc quá 3 lần
+            $verifyStatus->triedTime += 1;
+            if ($verifyStatus->triedTime >= 3)
+                $verifyStatus->status = 2;
+            $verifyMember->save($verifyStatus);
+            $response = ResponseBuilder::build(
+                $verifyStatus, $response, $request, 202);
+            return $response;
+
+
+
+//            if ($rs == -1){
+//                /* Verify fail, username not exists */
+//                $response = ResponseBuilder::build(
+//                    new ResponseJsonBadRequest('Username not found', 40401),
+//                    $response, $request, 404);
+//            }
+//            else {
+//                if ($rs == 0)
+//                    $status = 200;
+//                else
+//                    $status = 202;
+//                $verifyStatus = $verifyMember->findVerifyStatusByUserId($userId);
+//
+//                $response = ResponseBuilder::build(
+//                    $verifyStatus, $response, $request, $status);
+//            }
         }
         catch(ResponseJsonError $jsonError)
         {

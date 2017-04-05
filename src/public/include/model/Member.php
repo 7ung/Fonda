@@ -70,10 +70,13 @@ class Member extends BaseModel
     public function createUser()
     {
         //$this->refresh();
-        $stmt = $this->prepare(mysql_queries_3[CREATE_USER], "sss",
+        $stmt = $this->getConnection()->prepare(User::$queries['insert']);
+        $stmt->bind_param('sssi',
             $this->user->getUsername(),
             $this->user->getTemporaryPassword(),
-            $this->user->getEmail());
+            $this->user->getEmail(),
+            $_SERVER['REQUEST_TIME']);
+
         return $this->execute($stmt, function() use ($stmt)
         {
             //$stmt->close();
@@ -90,23 +93,6 @@ class Member extends BaseModel
         $username = \common\quick_hashing($username);
     }
 
-    public function login()
-    {
-        $stmt = $this->prepare(mysql_queries_2[LOGIN_ACCOUNT], "ss",
-            'QoG8fvo81l/s6pAsaOij/',
-            '$2y$10$AiaIOQGXi/RR/1/7509JKuDwGHJHgXzo20ZVwO5WSg9zHW2XMpZSO');
-        return $this->execute($stmt, function() use ($stmt)
-        {
-            $rs = -1;
-            $stmt->bind_result($rs);
-            $stmt->fetch();
-            /*
-             * rs = 1 nếu login thành công
-             * rs = 0 nếu login fail
-             */
-            return $rs;
-        });
-    }
 
     public function updatePassword($newPassword)
     {
@@ -121,6 +107,21 @@ class Member extends BaseModel
                 return 0;
             else
                 return 1;
+        });
+    }
+
+    public function findUserByUsername()
+    {
+        $stmt = $this->prepare(User::$queries['findByUsername'], 's', $this->user->username);
+        return $this->execute($stmt, function () use ($stmt)
+        {
+//            $token = new Token();
+            $stmt->bind_result($this->user->id, $this->user->username, $this->user->temporaryPassword,
+                $this->user->email, $this->user->userRoleId, $this->user->createdDate);
+
+            if ($stmt->fetch())
+                return $this->user;
+            return null;
         });
     }
 

@@ -81,7 +81,7 @@ class VerifyMember extends BaseModel
      * @param $userId
      * @return mixed
      */
-    function getVerifyStatusByUserId($userId)
+    function findVerifyStatusByUserId($userId)
     {
         $stmt = $this->prepare(mysql_queries_1[SELECT_VERIFY_STATUS_USERID], 'i', $userId);
 
@@ -105,29 +105,18 @@ class VerifyMember extends BaseModel
         });
     }
 
-    /**
-     * @return mixed
-     */
-    function verify()
+    public function save(VerifyStatus $verifyStatus)
     {
-
-        $stmt = $this->prepare(mysql_queries_2[VERIFY_ACCOUNT], 'is',
-            $this->verifyStatus->userId,
-            $this->verifyStatus->code);
-        return $this->execute($stmt, function () use ($stmt)
-        {
-            if ($stmt->affected_rows == 0)
-                return -1;
-            $rs = 0;
-            $stmt->bind_result($count);
-            $stmt->fetch();
-            /**
-             * rs = 0: verify thành công
-             * rs = 1: verify thất bại, sai code
-             * rs = 2: verify thất bại, sai code và hết 3 lần thử
-             * rs = 3: verify thất bại, quá expired time hoặc quá tried_time
-             */
-             return $rs;
+        $stmt = $this->prepare(VerifyStatus::$queries['save']);
+        $stmt->bind_param('siii', $verifyStatus->code, $verifyStatus->expired,
+            $verifyStatus->triedTime, $verifyStatus->status);
+        return $this->execute($stmt, function(){
+             return null;
         });
     }
+
+    /* input: userid, code,
+     * findVerifyStatusByUserId
+     *
+     * */
 }

@@ -13,7 +13,14 @@ use responses\ResponseJsonData;
 
 class Token extends ResponseJsonData
 {
+    private static $tableName = "access_token";
 
+
+
+    public static $queries = [
+        'findByUserId' => 'select id, access_token, expired, user_id from access_token where (user_id = ?)',
+        'create' => 'insert into access_token(access_token, expired, user_id) values(?, ?, ?)'
+    ];
     public $id = 0;
 
     public $userId = 0;
