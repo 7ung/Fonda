@@ -9,5 +9,5 @@ require 'BaseModel.php';
 require 'Member.php';
 require 'VerifyMember.php';
 require 'AccessToken.php';
-
+require 'UserRoleModel.php';
 //require '_queries.php';

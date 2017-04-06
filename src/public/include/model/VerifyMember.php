@@ -108,8 +108,8 @@ class VerifyMember extends BaseModel
     public function save(VerifyStatus $verifyStatus)
     {
         $stmt = $this->prepare(VerifyStatus::$queries['save']);
-        $stmt->bind_param('siii', $verifyStatus->code, $verifyStatus->expired,
-            $verifyStatus->triedTime, $verifyStatus->status);
+        $stmt->bind_param('siiii', $verifyStatus->code, $verifyStatus->expired,
+            $verifyStatus->triedTime, $verifyStatus->status, $verifyStatus->id);
         return $this->execute($stmt, function(){
              return null;
         });

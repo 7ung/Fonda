@@ -43,35 +43,28 @@ class ResendPasswordController extends Controller
             $this->assertNotNullParams($username, 'Username must not empty');
             $this->assertNotNullParams($email, 'Email must not empty');
 
-            $member = new Member($username, '', $email);
+            $member = new Member();
             /* Check if username exists*/
-            if ($member->checkExistsUsername() == false)
+            $user = $member->findUserByUsername($username);
+
+            if ($user == null)
             {
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Username not found', 40401),
                     $response, $request, 404);
                 return $response;
             }
-
-            /* Check if email exists*/
-//            if  ($member->checkExistsEmail() == false)
-//            {
-//                $response = ResponseBuilder::build(
-//                    new ResponseJsonBadRequest('Wrong email', 40402),
-//                    $response, $request, 404);
-//                return $response;
-//            }
-
-            $newPassword = \common\randString(12);
-
-            /* Update new Password */
-            if ($member->updatePassword($newPassword) === 0){
-               //throw new MySqlExecuteFailException('Some thing wrong', 500);
+            if ($user->email != $email){
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Wrong email', 40402),
                     $response, $request, 404);
                 return $response;
             }
+
+            $newPassword = \common\randString(12);
+
+            $user->temporaryPassword = \common\strong_hashing($newPassword);
+            $member->save($user);
 
             /* Send password to user via email */
             $mailSender = new SimpleMailSender();

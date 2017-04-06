@@ -24,7 +24,6 @@ require_once 'Controller.php';
 class LoginController extends Controller
 {
 
-
     function getMethod()
     {
         return [POST];
@@ -35,6 +34,21 @@ class LoginController extends Controller
         return '/login';
     }
 
+
+    /**
+     * Params: username, password
+     * Step 1: Find user by username => user. Assert user not null
+     * Step 2: Check if user has verified: Find verify status by user.id => verify_status.
+     *          Assert verify_status not null and verify_status.status = 3
+     * Step 3: Check if password is correct
+     * Step 4: Find access token by user.id => token.
+     *          IF token is null
+ *              THEN create new token and return.
+     *          ELSE return token.
+     * @param Request $request
+     * @param Response $response
+     * @return Response|static
+     */
     function exec(Request $request, Response $response)
     {
         $username = $request->getParsedBody()['username'];
@@ -44,8 +58,8 @@ class LoginController extends Controller
             $this->assertNotNullParams($password, 'Password must not empty');
 
             /* Get user info */
-            $member = new Member($username, $password);
-            $user = $member->findUserByUsername();
+            $member = new Member();
+            $user = $member->findUserByUsername($username);
 
             if ($user == null) {
                 /* User name incorrect */
@@ -80,7 +94,7 @@ class LoginController extends Controller
                 return $response;
             }
 
-            $accessToken = new AccessToken($username, $password);
+            $accessToken = new AccessToken();
 
             /*Kiểm tra có tồn tại token chưa. nếu có thì trả về token. nếu chưa thì tạo token*/
             $token = $accessToken->findTokenByUserId($user->id);

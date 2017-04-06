@@ -33,15 +33,7 @@ const mysql_queries =[
  */
 const mysql_queries_1 =
     [
-        /**
-         *
-         */
-        SELECT_USERNAME => 'select id from user WHERE username =?',
 
-        /**
-         *
-         */
-        SELECT_USER_EMAIL => 'select id from user WHERE email =?',
 
         /**
          *

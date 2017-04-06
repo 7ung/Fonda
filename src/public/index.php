@@ -21,4 +21,5 @@ $program->registerHandler(new TestController());
 $program->registerHandler(new VerifyAccountController());
 $program->registerHandler(new LoginController());
 $program->registerHandler(new ResendPasswordController());
+$program->registerHandler(new UpgradeUserController());
 $program->start();

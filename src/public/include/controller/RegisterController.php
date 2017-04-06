@@ -10,6 +10,7 @@ namespace fonda\controller;
 
 use common\SimpleMailSender;
 use exception\MailSenderException;
+use exception\MySqlExecuteFailException;
 use model\VerifyMember;
 use responses\ResponseBuilder;
 use responses\ResponseJsonBadRequest;
@@ -46,16 +47,16 @@ class RegisterController extends Controller
             $this->assertNotNullParams($password, 'Password must not empty');
             $this->assertNotNullParams($email, 'Email must not empty');
 
-            $member = new Member($username, $password, $email);
+            $member = new Member();
 
             //
-            if ($member->checkExistsUsername() == true)
+            if ($member->isExistsByUsername($username) == true)
             {
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('Username exists', 40901),
                     $response, $request, 409);
             }
-            else if ($member->checkExistsEmail() == true)
+            else if ($member->isExistsByEmail($email) == true)
             {
                 $response = ResponseBuilder::build(
                     new ResponseJsonBadRequest('User\'s Email exists', 40902),
@@ -68,7 +69,11 @@ class RegisterController extends Controller
                 /**
                  * Create User Account
                  */
-                $user = $member->createUser();
+                $member->createUser($username, $password, $email);
+
+                $user = $member->findUserByUsername($username);
+                if ($user == null)
+                    throw new MySqlExecuteFailException('Cannot create user');
 
                 /**
                  * Create Verify Code

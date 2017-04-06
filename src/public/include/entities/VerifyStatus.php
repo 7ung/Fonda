@@ -13,7 +13,7 @@ use responses\ResponseJsonData;
 class VerifyStatus extends ResponseJsonData
 {
     public static $queries = [
-        'save' => 'update verify_status set code = ?, expired = ?, tried_time = ?, status = ?'
+        'save' => 'update verify_status set code = ?, expired = ?, tried_time = ?, status = ? where id = ?'
     ];
     public $id = -1;
 

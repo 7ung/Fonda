@@ -20,31 +20,34 @@ require_once __DIR__.'/../../../../src/public/include/_loader.php';
 class MemberTest extends TestCase
 {
 
-
-    function testCreateUser(){
-        $username = '12112';
-        $password = '121';
-        $email = 'hghghgh@hh';
-        $member = new Member($username, $password, $email);
-        $this->assertNotNull($member->createUser());
-
+    private $member;
+    public function setUp(){
+        $this->member = new Member();
     }
-
     function test_findUserByUsername(){
         $username = 'tunghh';
-        $password = '';// don't care
-        $member = new Member($username, $password);
-        $this->assertNotNull($member->findUserByUsername());
+
+        $this->assertNotNull($this->member->findUserByUsername($username));
     }
 
-    function test__(){
-        $username = 'tunghh';
-        $password = '';// don't care
-        $member = new Member($username, $password);
-        $user = $member->findUserByUsername();
-        $this->assertEquals(true, \common\verify_string('123456', $user->temporaryPassword));
+    function test_isExistsByUsername(){
+        $this->assertEquals(true, $this->member->isExistsByUsername('tunghh'));
+        $this->assertEquals(false, $this->member->isExistsByUsername('dumm'));
+    }
 
+    function test_findUserByEmail(){
+        $this->assertNotNull($this->member->findUserByEmail('hohoangtung12a3@gmail.com'));
     }
 
 
+    function test_isExistsByEmail(){
+
+        $this->assertEquals(true, $this->member->isExistsByEmail('hohoangtung12a3@gmail.com'));
+        $this->assertEquals(false, $this->member->isExistsByEmail('dumm@dumm.dumm'));
+    }
+
+    function test_findUserById(){
+        $this->assertNotNull($this->member->findUserById(74)); // 74 is tunghh
+        $this->assertNull($this->member->findUserById(1));
+    }
 }

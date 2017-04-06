@@ -19,13 +19,9 @@ require_once __DIR__.'/BaseModel.php';
 class Member extends BaseModel
 {
 
-    private $user;
-
-    function __construct($_username, $_password, $_email = '')
+    function __construct()
     {
         parent::__construct();
-        $this->hash($_username, $_password);
-        $this->user = new User($_username, $_password, $_email);
 
     }
 
@@ -40,90 +36,95 @@ class Member extends BaseModel
      * @return true if exists user, false if not exists user
      * @throws: if execute fail
      */
-    public function checkExistsUsername()
+    public function isExistsByUsername($username)
     {
-        $stmt = $this->prepare(mysql_queries_1[SELECT_USERNAME],"s", $this->user->getUsername());
-        return $this->execute($stmt, function () use ($stmt)
-        {
-            if ($stmt->fetch() == 0)
-                return false;
-            else
-                return true;
-        });
+        return $this->findUserByUsername($username) != null;
     }
 
-    public function checkExistsEmail()
+    public function isExistsByEmail($email)
     {
-        $stmt = $this->prepare(mysql_queries_1[SELECT_USER_EMAIL], "s", $this->user->getEmail());
-        return $this->execute($stmt, function () use ($stmt)
-        {
-            if ($stmt->fetch() == 0)
-                return false;
-            else
-                return true;
-        });
+        return $this->findUserByEmail($email) != null;
     }
 
     /**
      * @return ../entities/User mixed
      */
-    public function createUser()
+    public function createUser($username, $password, $email)
     {
+        $username = \common\quick_hashing($username);
+        $password = \common\strong_hashing($password);
         //$this->refresh();
         $stmt = $this->getConnection()->prepare(User::$queries['insert']);
         $stmt->bind_param('sssi',
-            $this->user->getUsername(),
-            $this->user->getTemporaryPassword(),
-            $this->user->getEmail(),
+            $username,
+            $password,
+            $email,
             $_SERVER['REQUEST_TIME']);
 
         return $this->execute($stmt, function() use ($stmt)
         {
-            //$stmt->close();
-            $this->user->setId($this->lastInsertId());
-            return $this->user;
+            return true;
         });
 
     }
 
-    private function hash(&$username, &$password)
+
+    public function findUserByUsername($username)
     {
-        //hashing password and username
-        $password = \common\strong_hashing($password);
         $username = \common\quick_hashing($username);
-    }
 
-
-    public function updatePassword($newPassword)
-    {
-        $this->user->temporaryPassword = \common\strong_hashing($newPassword);
-        $stmt = $this->prepare(mysql_queries_3[UPDATE_USER_USERNAME_PASSWORD], 'sss',
-            $this->user->temporaryPassword,
-            $this->user->username,
-            $this->user->email);
-        return $this->execute($stmt, function () use ($stmt)
-        {
-            if ($stmt->affected_rows == 0)
-                return 0;
-            else
-                return 1;
-        });
-    }
-
-    public function findUserByUsername()
-    {
-        $stmt = $this->prepare(User::$queries['findByUsername'], 's', $this->user->username);
+        $stmt = $this->prepare(User::$queries['findByUsername'], 's', $username);
         return $this->execute($stmt, function () use ($stmt)
         {
 //            $token = new Token();
-            $stmt->bind_result($this->user->id, $this->user->username, $this->user->temporaryPassword,
-                $this->user->email, $this->user->userRoleId, $this->user->createdDate);
+            $user = new User();
+            $stmt->bind_result($user->id, $user->username, $user->temporaryPassword,
+                $user->email, $user->userRoleId, $user->createdDate);
 
             if ($stmt->fetch())
-                return $this->user;
+                return $user;
             return null;
         });
     }
+
+    public function findUserByEmail($email){
+        $stmt = $this->prepare(User::$queries['findByEmail'], 's', $email);
+        return $this->execute($stmt, function () use ($stmt)
+        {
+            $user = new User();
+            $stmt->bind_result($user->id, $user->username, $user->temporaryPassword,
+                $user->email, $user->userRoleId, $user->createdDate);
+
+            if ($stmt->fetch())
+                return $user;
+            return null;
+        });
+    }
+
+    public function findUserById($userId){
+        $stmt = $this->prepare(User::$queries['findById'], 's', $userId);
+        return $this->execute($stmt, function () use ($stmt)
+        {
+            $user = new User();
+            $stmt->bind_result($user->id, $user->username, $user->temporaryPassword,
+                $user->email, $user->userRoleId, $user->createdDate);
+
+            if ($stmt->fetch())
+                return $user;
+            return null;
+        });
+    }
+
+    public function save(User $user)
+    {
+        $stmt = $this->prepare(User::$queries['save']);
+        $stmt->bind_param('ssii', $user->temporaryPassword, $user->email,
+            $user->userRoleId, $user->id);
+        return $this->execute($stmt, function(){
+            return true;
+        });
+    }
+
 
 
 }
