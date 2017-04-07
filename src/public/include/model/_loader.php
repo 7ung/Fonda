@@ -10,4 +10,7 @@ require 'Member.php';
 require 'VerifyMember.php';
 require 'AccessToken.php';
 require 'UserRoleModel.php';
+require 'FondaModel.php';
+require 'LocationModel.php';
+require 'FondaGroupModel.php';
 //require '_queries.php';

@@ -12,6 +12,24 @@ require_once __DIR__.'/ResponseJson.php';
 
 class ResponseJsonBadRequest implements ResponseJson
 {
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @param \Slim\Http\Response $response
+     * @param $code
+     * @return \Slim\Http\Response
+     */
+    public static function responseBadRequest(\Slim\Http\Request $request, \Slim\Http\Response $response, $code){
+        switch ($code){
+            case 40001:  return self::responseInvalidToken($request, $response);
+            case 40403: return self::responseNotFoundFonda($request, $response);
+            default: return null;
+
+
+        }
+
+    }
+
     private $msg;
 
     private $status;
@@ -56,5 +74,20 @@ class ResponseJsonBadRequest implements ResponseJson
             $rt[REASON] = $this->getDetail();
         }
         return $rt;
+    }
+
+
+    private static function responseInvalidToken(\Slim\Http\Request $request, \Slim\Http\Response $response){
+        return ResponseBuilder::build(
+            new \responses\ResponseJsonBadRequest('Token is invalid or user not found', 40001),
+            $response, $request, 400
+        );
+    }
+
+    private static function responseNotFoundFonda(\Slim\Http\Request $request, \Slim\Http\Response $response){
+        return ResponseBuilder::build(
+            new \responses\ResponseJsonBadRequest('Fonda not found', 40403),
+            $response, $request, 400
+        );
     }
 }

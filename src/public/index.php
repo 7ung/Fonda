@@ -5,6 +5,7 @@
  * Date: 03/15/2017
  * Time: 3:22 PM
  */
+use fonda\controller\FondaController;
 use fonda\controller\LoginController;
 use fonda\controller\RegisterController;
 use fonda\controller\ResendPasswordController;
@@ -22,4 +23,6 @@ $program->registerHandler(new VerifyAccountController());
 $program->registerHandler(new LoginController());
 $program->registerHandler(new ResendPasswordController());
 $program->registerHandler(new UpgradeUserController());
+$program->registerHandler(new FondaController());
+$program->registerHandler(new FondaUpdateController());
 $program->start();

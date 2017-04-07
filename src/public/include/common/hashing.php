@@ -48,3 +48,16 @@ function randString($length)
     }
     return implode('', $rs);
 }
+
+function removeHashPrefix($string){
+    static $_hashPrefix = '$2y$10$';
+    if (strpos($string, $_hashPrefix) === 0)
+        return substr($string, strlen($_hashPrefix));
+    else
+        return $string;
+}
+
+function putHashPrefix($string){
+    static $_hashPrefix = '$2y$10$';
+    return $_hashPrefix.$string;
+}

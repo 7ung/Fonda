@@ -67,4 +67,23 @@ class AccessToken extends BaseModel
         });
     }
 
+    /**
+     * @param $token
+     * @return Token
+     */
+    public function findTokenByTokenString($token)
+    {
+        $stmt = $this->prepare(Token::$queries['findByToken'], 's', $token);
+        return $this->execute($stmt, function () use ($stmt){
+           if ($stmt->affected_rows == 0)
+               return null;
+           $tokenEntity = new Token();
+           $stmt->bind_result($tokenEntity->id, $tokenEntity->token,
+               $tokenEntity->expired, $tokenEntity->userId);
+           if ($stmt->fetch())
+               return $tokenEntity;
+           return null;
+        });
+    }
+
 }

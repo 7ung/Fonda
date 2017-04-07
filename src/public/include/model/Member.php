@@ -101,6 +101,10 @@ class Member extends BaseModel
         });
     }
 
+    /**
+     * @param $userId
+     * @return User
+     */
     public function findUserById($userId){
         $stmt = $this->prepare(User::$queries['findById'], 's', $userId);
         return $this->execute($stmt, function () use ($stmt)

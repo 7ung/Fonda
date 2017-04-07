@@ -13,6 +13,10 @@ use entities\UserRole;
 
 class UserRoleModel extends BaseModel
 {
+    /**
+     * @param $code
+     * @return UserRole
+     */
     public function findByCode($code){
         $stmt = $this->prepare(UserRole::$queries['findByCode'], 's', $code);
         return $this->execute($stmt, function () use ($stmt){

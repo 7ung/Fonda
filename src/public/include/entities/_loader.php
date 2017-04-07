@@ -9,3 +9,6 @@ require 'User.php';
 require 'VerifyStatus.php';
 require 'Token.php';
 require 'UserRole.php';
+require 'Fonda.php';
+require 'FondaGroup.php';
+require 'Location.php';

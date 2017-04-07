@@ -18,8 +18,9 @@ class Token extends ResponseJsonData
 
 
     public static $queries = [
+        'create' => 'insert into access_token(access_token, expired, user_id) values(?, ?, ?)',
         'findByUserId' => 'select id, access_token, expired, user_id from access_token where (user_id = ?)',
-        'create' => 'insert into access_token(access_token, expired, user_id) values(?, ?, ?)'
+        'findByToken' => 'select id, access_token, expired, user_id from access_token where (access_token = ?)'
     ];
     public $id = 0;
 
@@ -33,18 +34,23 @@ class Token extends ResponseJsonData
 
     function serializableArray()
     {
+        $_n = $this->name();
         $rs = array(
-            'access_token' => array()
+            $_n => array()
         );
 //        if ($this->id !== 0)
 //            $rs['access_token']['id'] = $this->id;
         if ($this->userId !== 0)
-            $rs['access_token']['userId'] = $this->userId;
+            $rs[$_n]['userId'] = $this->userId;
         if ($this->token !== null)
-            $rs['access_token']['token'] = $this->token;
+            $rs[$_n]['token'] = \common\removeHashPrefix($this->token);
         if ($this->expired !== 0)
-            $rs['access_token']['expired'] = $this->expired;
+            $rs[$_n]['expired'] = $this->expired;
         return $rs;
 
+    }
+
+    public function name(){
+        return 'access_token';
     }
 }

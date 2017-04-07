@@ -20,8 +20,15 @@ require_once 'ResponseJson.php';
 
 class ResponseBuilder
 {
+    /**
+     * @param \responses\ResponseJson $data
+     * @param Response $response
+     * @param Request|null $request
+     * @param int $statusCode
+     * @return Response
+     */
     static function build(ResponseJson $data, Response $response,
-                        Request $request = null, $statusCode = 200)
+                          Request $request = null, $statusCode = 200)
     {
         $responseJsonArray = array();
         $responseJsonArray[VER] = API_VERSION;
@@ -32,7 +39,8 @@ class ResponseBuilder
             return $response->withJson($responseJsonArray, $statusCode);
 
         if ($data instanceof ResponseJsonData){
-            $responseJsonArray[DATA] = $data->serializableArray();
+            $name = $data->name();
+            $responseJsonArray[$name] = $data->serializableArray()[$name];
         } else if ($data instanceof ResponseJsonError ) {
             $responseJsonArray[ERROR] = $data->serializableArray();
         } else if ($data instanceof ResponseJsonBadRequest){

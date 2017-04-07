@@ -103,7 +103,7 @@ abstract class BaseModel
         $this->connection = (new Connection())->connect();
     }
 
-    protected function lastInsertId()
+    public  function lastInsertId()
     {
         $stmt = $this->prepare(mysql_queries[LAST_INSERT_ID]);
         return $this->execute($stmt, function () use ($stmt)

@@ -44,19 +44,20 @@ class User extends ResponseJsonData
 
     function serializableArray()
     {
+        $_n = $this->name();
         $rs = array(
-            'user' => array()
+            $_n => array()
         );
         if ($this->id !== 0)
-            $rs['user']['id'] = $this->id;
+            $rs[$_n]['id'] = $this->id;
      //   if ($this->username !== '')
      //       $rs['user']['username'] = $this->username;
         if ($this->email !== '')
-            $rs['user']['email'] = $this->email;
+            $rs[$_n]['email'] = $this->email;
         if ($this->userRoleId !== 0 )
-            $rs['user']['user_role_id'] = $this->userRoleId;
+            $rs[$_n]['user_role_id'] = $this->userRoleId;
         if ($this->userRole !== null)
-            $rs['user']['user_role'] = $this->userRole->serializableArray();
+            $rs[$_n]['user_role'] = $this->userRole->serializableArray()['user_role'];
         return $rs;
 
     }
@@ -150,4 +151,8 @@ class User extends ResponseJsonData
         $this->createdDate = $createdDate;
     }
 
+    function name()
+    {
+        return 'user';
+    }
 }

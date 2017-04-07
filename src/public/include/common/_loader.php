@@ -7,3 +7,4 @@
  */
 require 'SimpleMailSender.php';
 require_once 'hashing.php';
+require_once 'utils.php';

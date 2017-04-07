@@ -29,17 +29,19 @@ class TestController extends Controller
 
     function getMethod()
     {
-        return [GET];
+        return [PUT];
     }
 
     function getUrl()
     {
-        return '/test';
+        return '/test/{id}';
     }
 
     function exec(Request $request, Response $response)
     {
-        echo $_SERVER['REQUEST_TIME'];
+        echo $_SERVER['REQUEST_TIME']; echo '<br/>';
+        echo $request->getParam('a'); echo '<br/>';
+        echo $request->getAttribute('id');
         //echo generateToken(67);
         //        $body = mail_template['verify_code_required'][MAIL_BODY];
 //        if ($mailSender->sendEmail('hohoangtung12a3@gmail.com',

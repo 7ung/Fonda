@@ -20,4 +20,10 @@ class HashingTest extends PHPUnit_Framework_TestCase
     {
         echo \common\randString(12);
     }
+
+    function test_removeHashPrefix(){
+        $this->assertEquals('7139',\common\removeHashPrefix('$2y$10$7139'));
+        $this->assertEquals('98765',\common\removeHashPrefix('98765'));
+        $this->assertNotEquals('1234',\common\removeHashPrefix('$2y$101234'));
+    }
 }

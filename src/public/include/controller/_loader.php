@@ -13,3 +13,5 @@ require 'VerifyAccountController.php';
 require 'LoginController.php';
 require 'ResendPasswordController.php';
 require 'UpgradeUserController.php';
+require 'FondaController.php';
+require 'FondaUpdateController.php';

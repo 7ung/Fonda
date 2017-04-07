@@ -9,9 +9,10 @@
 namespace responses;
 
 
-class ResponseJsonData implements ResponseJson
+abstract class ResponseJsonData implements ResponseJson
 {
 
+    abstract function name();
     function serializableArray()
     {
         // TODO: Implement serializableArray() method.

@@ -2,6 +2,7 @@
 use fonda\controller\Controller;
 use model\AccessToken;
 use responses\ResponseBuilder;
+use responses\ResponseJsonBadRequest;
 use responses\ResponseJsonError;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -13,9 +14,9 @@ use Slim\Http\Response;
  * Time: 10:07 AM
  */
 
-require_once 'Controller.php';
+require_once 'AuthorizedController.php';
 
-class UpgradeUserController extends Controller
+class UpgradeUserController extends AuthorizedController
 {
 
     function getMethod()
@@ -26,6 +27,11 @@ class UpgradeUserController extends Controller
     function getUrl()
     {
         return '/upgrade_user';
+    }
+
+    function getRoleName()
+    {
+        return 'Guess';
     }
 
 
@@ -40,23 +46,14 @@ class UpgradeUserController extends Controller
      */
     function exec(Request $request, Response $response)
     {
+        $_code = $this->preExecute($request);
+        if ($_code != 0)
+            return ResponseJsonBadRequest::responseBadRequest($request, $response, $_code);
+
         $userId = $request->getParam('id');
-        $token = $request->getParam('token');
 
         try{
             $this->assertNotNullParams($userId, 'User id must not empty');
-            $this->assertNotNullParams($token, 'User token must not empty');
-
-            $accessTokenModel = new AccessToken();
-
-            $userToken = $accessTokenModel->findTokenByUserId($userId);
-            if ($userToken == null || $userToken->token != $token){
-                $response = ResponseBuilder::build(
-                    new \responses\ResponseJsonBadRequest('Token is invalid', 40001),
-                    $response, $request, 400
-                );
-                return $response;
-            }
 
             $userRoleModel = new \model\UserRoleModel();
             $userRole = $userRoleModel->findByCode('Vendor');
@@ -66,13 +63,6 @@ class UpgradeUserController extends Controller
             }
             $member = new \model\Member();
             $user = $member->findUserById($userId);
-
-            if ($user->userRoleId == $userRole->id){
-                return ResponseBuilder::build(
-                    new \responses\ResponseJsonBadRequest('User has upgraded yet',40601),
-                    $response,$request, 406
-                );
-            }
 
             $user->userRoleId = $userRole->id;
             $user->userRole = $userRole;
@@ -86,4 +76,6 @@ class UpgradeUserController extends Controller
         }
         return $response;
     }
+
+
 }

@@ -47,7 +47,7 @@ class LoginController extends Controller
      *          ELSE return token.
      * @param Request $request
      * @param Response $response
-     * @return Response|static
+     * @return
      */
     function exec(Request $request, Response $response)
     {
@@ -109,7 +109,7 @@ class LoginController extends Controller
         }
         catch(ResponseJsonError $jsonError)
         {
-            $response = ResponseBuilder::build($jsonError, $response, $request, 400);
+            $response = ResponseBuilder::build($jsonError, $response, $request, 500);
         }
 
         return $response;

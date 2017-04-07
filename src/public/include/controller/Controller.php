@@ -9,6 +9,7 @@
 namespace fonda\controller;
 
 use exception\InvalidArgumentException;
+use responses\ResponseBuilder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -30,4 +31,6 @@ abstract class Controller
         if ($var == null)
             throw new InvalidArgumentException($message, 400);
     }
+
+
 }

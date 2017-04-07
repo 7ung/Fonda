@@ -36,21 +36,27 @@ class VerifyStatus extends ResponseJsonData
 
     function serializableArray()
     {
+        $name = $this->name();
         $rs = array(
-            'verify_info' => array()
+            $name => array()
         );
         if ($this->id !== -1)
-            $rs['verify_info']['id'] = $this->id;
+            $rs[$name]['id'] = $this->id;
         if ($this->userId !== -1)
-            $rs['verify_info']['user_id'] = $this->userId;
+            $rs[$name]['user_id'] = $this->userId;
 //        if ($this->code != null)
 //            $rs['verify_info']['code'] = $this->code; // not allow client view code
         if ($this->expired !== -1)
-            $rs['verify_info']['expired'] = $this->expired;
+            $rs[$name]['expired'] = $this->expired;
         if ($this->triedTime !== -1)
-            $rs['verify_info']['tried_time'] = $this->triedTime;
+            $rs[$name]['tried_time'] = $this->triedTime;
         if ($this->status !== -1)
-            $rs['verify_info']['status'] = $this->status;
+            $rs[$name]['status'] = $this->status;
         return $rs;
+    }
+
+    function name()
+    {
+        return 'verify_status';
     }
 }
