@@ -12,6 +12,7 @@ use App\Model\User;
 use Closure;
 use Responses\ResponseJsonBadRequest;
 
+require_once __DIR__.'/../../Responses/_loader.php';
 /**
  * Class VerifyUserToken
  * Chỉ áp dụng cho url kiểu /user/{id}/some_resource ...
@@ -30,19 +31,21 @@ class VerifyUserToken
     public function handle($request, Closure $next)
     {
         $userId = $request->route()->id;
-        $token = \Request::input('token');
-
-        if (empty($token))
-            return response()->json(ResponseJsonBadRequest::responseBadRequest(40300));
-
         $user = User::find($userId);
         if ($user == null)
-             return response()->json(ResponseJsonBadRequest::responseBadRequest(40404));
+            return response()->json(ResponseJsonBadRequest::responseBadRequest(40404));
 
-        $token = \Common\putHashPrefix($token);
-        if ($user->access_token == null || $user->access_token->access_token != $token)
-            return response()->json(ResponseJsonBadRequest::responseBadRequest(40300));
+        if ($request->method() != 'GET') {
+            $token = \Request::input('token');
 
+            if (empty($token))
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40300));
+
+
+            $token = \Common\putHashPrefix($token);
+            if ($user->access_token == null || $user->access_token->access_token != $token)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40300));
+        }
         $request->route()->setParameter('user', $user);
 
         return $next($request);

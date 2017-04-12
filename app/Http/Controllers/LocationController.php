@@ -18,29 +18,10 @@ use Responses\ResponseJsonBadRequest;
 require_once __DIR__ . '/../../Exceptions/_loader.php';
 require_once __DIR__ . '/../../Responses/_loader.php';
 
-class LocationController
+class LocationController extends Controller
 {
 
     private static $paging = 4;
-
-    /**
-     * Url          /locations
-     * Method       get
-     * Query params:
-     *              city (non-required)
-     *              type ('user', 'fonda', non-required)
-     */
-    public function index()
-    {
-        $city = Input::get('city');
-        $type = Input::get('type');
-
-        $locations = Location::all();
-
-        if (empty($city) && empty($type))
-            return ResponseBuilder::build($locations->toArray());
-        // tạm.
-    }
 
     /**
      * Mỗi người dùng có thể có nhiều location.
@@ -51,24 +32,12 @@ class LocationController
      * @param $userId
      * @return array
      */
-    public function showByUser($userId)
+    public function index(\Request $request,$userId, User $user)
     {
-        $user = User::find($userId);
         $locations = Location::where('profile_id', '=', $user->profile->id)->paginate(self::$paging);
         return ResponseBuilder::build($locations->toArray());
     }
 
-    /**
-     * Một cửa hàng có 1 location
-     * @param $userId
-     * @return array
-     */
-    public function fondaLocation($userId)
-    {
-        $user = User::find($userId);
-        $locations = Location::where('profile_id', '=', $user->profile->id)->paginate(self::$paging);
-        return ResponseBuilder::build($locations->toArray());
-    }
 
     /**
      * Show 1 location theo location id
@@ -77,9 +46,10 @@ class LocationController
      * @param $id
      * @return array
      */
-    public function show($id)
+    public function show(\Request $request,$userId, $location_id, User $user, Location $location)
     {
-        return ResponseBuilder::build(Location::find($id));
+        $location->makeHidden(['profile']);
+        return ResponseBuilder::build($location);
     }
 
     /**
@@ -127,9 +97,8 @@ class LocationController
         return ResponseBuilder::build($location, 200, 'Create location successfully');
     }
 
-    public function delete(\Request $request, $location_id, User $user)
+    public function delete(\Request $request,$userId, $location_id, User $user, Location $location)
     {
-        $location = Location::find($location_id);
         $location->delete();
         return ResponseBuilder::build(null, 200,'Delete location successfully');
     }

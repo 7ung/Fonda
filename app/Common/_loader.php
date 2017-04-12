@@ -8,3 +8,4 @@
 
 require 'Hashing.php';
 require 'SimpleMailSender.php';
+require 'Utils.php';

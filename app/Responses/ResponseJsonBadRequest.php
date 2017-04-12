@@ -20,6 +20,7 @@ class ResponseJsonBadRequest implements ResponseJson
         40004 => 'Verify Code must not empty',
         40005 => 'Longitude must not empty',
         40006 => 'Latitude must not empty',
+        40007 => 'Image must not empty',
         40101 => 'Username or password wrong',
         40102 => 'Account has not active',
         40300 => 'Invalid token or user not found',
@@ -31,7 +32,9 @@ class ResponseJsonBadRequest implements ResponseJson
         40406 => 'Image not found',
         40901 => 'Username exists',
         40902 => 'User\'s email exists',
-        40903 => 'Account has actived'
+        40903 => 'Account has actived',
+        40904 => 'Image not belongs to user',
+        40905 => 'Location not belongs to user',
 
     ];
 //    /**

@@ -53,6 +53,11 @@ class User extends Model
         return $this->hasOne('App\Model\Profile');
     }
 
+    public function image()
+    {
+        return $this->hasMany('App\Model\Image');
+    }
+
     /**
      * @param $newPassword
      * @return bool

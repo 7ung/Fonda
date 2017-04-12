@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test','TestController@action');
+Route::post('/test','TestController@action');
 
 Route::get('/fonda/{id}','FondaController@index');
 
@@ -38,28 +38,41 @@ Route::post('/update_password', 'Member\ResendPasswordController@update')->middl
 Route::get('/users/{id}/profile', 'Member\ProfileController@view');
 Route::put('/users/{id}/profile', 'Member\ProfileController@update')->middleware('auth_user');
 
+
+
 /**
  * Location
  */
-// Tất cả location, hoặc location theo city = ?
-Route::get('/locations', 'LocationController@index');
 
-// Tất cả Location theo user id.
-Route::get('/users/{id}/location', 'LocationController@showByUser');
+Route::group(['middleware' => 'auth_user'], function (){
 
-// 1 Location theo fonda id.
-Route::get('/fonda/{id}/location', 'LocationController@xxx');
+    Route::get('/users/{id}/location', 'LocationController@index');
 
-// Location theo location id
-Route::get('/locations/{id}', 'LocationController@show');
+    Route::post('/users/{id}/location', 'LocationController@store');
 
-// Tạo một location mới và gắn cho user id
-Route::post('/users/{id}/location', 'LocationController@store')->middleware('auth_user');
+    Route::get('/users/{id}/location/{location_id}', 'LocationController@show')
+        ->middleware('location_res');
 
-// Tạo một location mới và gắn cho fonda
-//Route::post('/fonda/{id}/location', 'LocationController@xxx');
+    Route::delete('/users/{id}/location/{location_id}', 'LocationController@delete')
+        ->middleware('location_res');
 
-//  Update một location theo location id
-// Không cho update
+});
 
-Route::delete('/locations/{id}', 'LocationController@delete')->middleware('auth_token');
+
+/**
+ * Image
+ */
+
+Route::group(['middleware' => 'auth_user'], function (){
+
+    Route::post('/users/{id}/image', 'ImageController@store');
+
+    Route::get('/users/{id}/image', 'ImageController@index');
+
+    Route::get('/users/{id}/image/{image_id}', 'ImageController@show')->middleware('image_res');
+
+    Route::put('/users/{id}/image/{image_id}', 'ImageController@update')->middleware('image_res');
+
+    Route::delete('/users/{id}/image/{image_id}', 'ImageController@delete')->middleware('image_res');
+});
+

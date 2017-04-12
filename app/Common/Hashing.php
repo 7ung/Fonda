@@ -36,35 +36,3 @@ function verify_string($string, $hashedString)
     return password_verify($string, $hashedString);
 }
 
-/**
- * @param $userId
- * @return string
- */
-function generateToken($userId)
-{
-    $fullString = $userId.SECURE_STRING_TOKEN.randString(8);
-    return strong_hashing($fullString);
-}
-
-function randString($length)
-{
-    $rs = array();
-    for ($i = 0; $i < $length; $i++)
-    {
-        array_push($rs, alphabet[random_int(0, 61)]);
-    }
-    return implode('', $rs);
-}
-
-function removeHashPrefix($string){
-    static $_hashPrefix = '$2y$10$';
-    if (strpos($string, $_hashPrefix) === 0)
-        return substr($string, strlen($_hashPrefix));
-    else
-        return $string;
-}
-
-function putHashPrefix($string){
-    static $_hashPrefix = '$2y$10$';
-    return $_hashPrefix.$string;
-}

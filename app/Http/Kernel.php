@@ -58,7 +58,11 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         //
         'auth_user' => \App\Http\Middleware\VerifyUserToken::class,
-        'auth_token' => \App\Http\Middleware\VerifyToken::class
+        'auth_token' => \App\Http\Middleware\VerifyToken::class,
+
+        // Resource Middleware
+        'location_res' => \App\Http\Middleware\ResourcesMiddleware\LocationResource::class,
+        'image_res' => \App\Http\Middleware\ResourcesMiddleware\ImageResource::class,
 
     ];
 }

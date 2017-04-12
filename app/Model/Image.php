@@ -20,6 +20,11 @@ class Image extends Model
 
     public $jsonName = 'image';
 
+
+    public function user()
+    {
+        return $this->belongsTo('App\Model\User');
+    }
 //
 //    public function profile()
 //    {

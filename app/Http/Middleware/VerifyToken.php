@@ -13,6 +13,8 @@ use App\Model\AccessToken;
 use Closure;
 use Responses\ResponseJsonBadRequest;
 
+require_once __DIR__.'/../../Responses/_loader.php';
+
 class VerifyToken
 {
     /**
