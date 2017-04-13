@@ -84,7 +84,7 @@ class ResendPasswordController extends Controller
     {
         $password = Request::input('password');
         if (empty($password))
-            return ResponseJsonBadRequest::responseBadRequest(40001);
+            return ResponseJsonBadRequest::responseBadRequest(40003);
 
         $rs = $user->changePassword($password);
         $user = User::find($user->id);

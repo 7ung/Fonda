@@ -24,17 +24,17 @@ class TestController extends Controller
 {
     public function action()
     {
-
-        $image = Input::get('image_base64');
-        $path1 = __DIR__.'/../../../storage/img/92';
-        $path2 = __DIR__.'/../../../storage/img/93';
-
-////        $myfile = fopen($path, "wb");
-//        base64_to_jpeg($image, $path);
-        mkdir($path2, 0777, true);
-        if (is_dir($path2))
-            return ['success'];
-        return ['fail'];
+        return \URL::to('/');
+//        $image = Input::get('image_base64');
+//        $path1 = __DIR__.'/../../../storage/img/92';
+//        $path2 = __DIR__.'/../../../storage/img/93';
+//
+//////        $myfile = fopen($path, "wb");
+////        base64_to_jpeg($image, $path);
+//        mkdir($path2, 0777, true);
+//        if (is_dir($path2))
+//            return ['success'];
+//        return ['fail'];
     }
 
 

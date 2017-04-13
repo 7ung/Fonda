@@ -61,4 +61,14 @@ class AccessToken extends Model
     {
         return \Common\removeHashPrefix($this->access_token);
     }
+
+    public static function dumm()
+    {
+        $token = new AccessToken();
+        $token->access_token = '???';
+        $token->user_id = 0;
+        $token->id = 0;
+        $token->expired = 0;
+        return $token;
+    }
 }

@@ -31,5 +31,19 @@ class Image extends Model
 //        return $this->hasOne('App\Model\Profile');
 //    }
 
+    public static function dummMany()
+    {
+        return Image::where('user_id', '=', 92)->paginate(8)->toJson();
+    }
 
+
+    public static function dumm()
+    {
+        $image = new Image();
+        $image->url = 'path/file.jpg';
+        $image->description = 'dumm';
+        $image->upload_date = time();
+        $image->user_id = 0;
+        return $image;
+    }
 }

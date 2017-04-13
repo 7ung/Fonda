@@ -29,7 +29,7 @@ class ImageResource
             return response()->json(ResponseJsonBadRequest::responseBadRequest(40406));
 
         if ($image->user_id != $request->route()->user->id)
-            return ResponseJsonBadRequest::responseBadRequest(40904);
+            return ResponseJsonBadRequest::responseBadRequest(40906);
 
         $request->route()->setParameter('image', $image);
         return $next($request);

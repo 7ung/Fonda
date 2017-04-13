@@ -24,6 +24,20 @@ class Location extends Model
         return $this->belongsTo('App\Model\Profile');
     }
 
+    public static function dummMany()
+    {
+       return Location::where('profile_id', '=', 10)->paginate(4)->toJson();
+    }
 
+    public static function dumm()
+    {
+        $location = new Location();
+        $location->longitude = 13.141;
+        $location->latitude = 95.4819;
+        $location->profile_id = 0;
+        $location->id = 0;
+        $location->city = 'HCM';
+        return $location;
+    }
 
 }

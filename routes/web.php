@@ -11,11 +11,21 @@
 |
 */
 
+/**
+ * WEB PAGES
+ */
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/test','TestController@action');
+Route::get('/document', 'DocumentController@index');
+Route::get('/document/{id}', 'DocumentController@show');
+
+/**
+ * WEB APIS
+ */
+
+Route::get('/test','TestController@action');
 
 Route::get('/fonda/{id}','FondaController@index');
 

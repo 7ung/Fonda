@@ -28,6 +28,7 @@ class Profile extends Model
 
     public $jsonName = 'profile';
 
+
 //    public $visible = [ 'location', 'image'];
 
 //    public function user()
@@ -63,5 +64,10 @@ class Profile extends Model
         $profile->user_id = $user->id;
 
         return $profile->save();
+    }
+
+    public static function dumm()
+    {
+        return Profile::with(['image', 'location'])->find(10);
     }
 }

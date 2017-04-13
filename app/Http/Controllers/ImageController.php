@@ -62,7 +62,7 @@ class ImageController extends Controller
         $newFileName = $userFolder.'/'.$image->id.'.jpg';
         rename($fileName, $newFileName);
 
-        $image->url = '/storage/img/'.$user->id.'/'.$image->id.'.jpg';
+        $image->url = \URL::to('/').'/storage/img/'.$user->id.'/'.$image->id.'.jpg';
         $image->save();
 
         return ResponseBuilder::build($image, 200, 'Upload file successfully');
@@ -88,7 +88,7 @@ class ImageController extends Controller
 
     public function delete(\Request $request, $userId, $imageId, User $user, Image $image)
     {
-        unlink(__DIR__.'/../../../'.$image->url);
+        unlink($image->url);
         $image->delete();
         return ResponseBuilder::build(null, 200, 'Delete image successfully');
     }

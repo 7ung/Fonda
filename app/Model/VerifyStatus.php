@@ -92,4 +92,17 @@ class VerifyStatus extends Model
             throw new MailSenderException($e->getMessage(), 500);
         }
     }
+
+    public static function dumm()
+    {
+        $verifyStatus = new VerifyStatus();
+        $verifyStatus->id = 0;
+        $verifyStatus->code = '???';
+        $verifyStatus->expired = time() + 2 * 24 * 60 * 60;
+        $verifyStatus->tried_time = 0;
+        $verifyStatus->status = 1;
+        $verifyStatus->user_id = 0;
+        return $verifyStatus;
+
+    }
 }

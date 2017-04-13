@@ -13,10 +13,10 @@ require_once __DIR__.'/ResponseJson.php';
 class ResponseJsonBadRequest implements ResponseJson
 {
 
-    private static $errosMessage = [
+    public static $errosMessage = [
         40001 => 'Username must not empty',
         40002 => 'Email must not empty',
-        40003 => 'Email must not empty',
+        40003 => 'Password must not empty',
         40004 => 'Verify Code must not empty',
         40005 => 'Longitude must not empty',
         40006 => 'Latitude must not empty',
@@ -33,8 +33,8 @@ class ResponseJsonBadRequest implements ResponseJson
         40901 => 'Username exists',
         40902 => 'User\'s email exists',
         40903 => 'Account has actived',
-        40904 => 'Image not belongs to user',
         40905 => 'Location not belongs to user',
+        40906 => 'Image not belongs to user',
 
     ];
 //    /**

@@ -139,4 +139,14 @@ class User extends Model
     public function hidden(){
         $this->makeHidden($this->hidden);
     }
+
+    public static function dumm()
+    {
+        $user = new User();
+        $user->password = '???';
+        $user->username = 'hash username';
+        $user->id = 0;
+        $user->email = 'dumm@email.com';
+        return $user;
+    }
 }
