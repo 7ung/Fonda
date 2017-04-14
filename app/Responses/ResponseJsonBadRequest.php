@@ -14,6 +14,7 @@ class ResponseJsonBadRequest implements ResponseJson
 {
 
     public static $errosMessage = [
+        // BAD REQUEST
         40001 => 'Username must not empty',
         40002 => 'Email must not empty',
         40003 => 'Password must not empty',
@@ -21,20 +22,38 @@ class ResponseJsonBadRequest implements ResponseJson
         40005 => 'Longitude must not empty',
         40006 => 'Latitude must not empty',
         40007 => 'Image must not empty',
+        40010 => 'Fonda name must not empty',
+        40011 => 'Fonda group id must not empty',
+        40012 => 'Scale must not empty',
+        40013 => 'Scale value wrong',
+        40014 => 'Wrong time format',
+        40015 => 'Location format is wrong',
+        40016 => 'Day of week format is wrong',
+        40017 => 'Active param only 0 or 1',
+        // UNAUTHORIZED
         40101 => 'Username or password wrong',
         40102 => 'Account has not active',
+        // FORBIDDEN
         40300 => 'Invalid token or user not found',
+        40301 => 'User role must be VENDOR',
+        40311 => 'User has not permission',
+        // NOT FOUND
         40401 => 'Username not found',
         40402 => 'Wrong email',
         40403 => 'Fonda not found',
         40404 => 'User not found',
         40405 => 'Location not found',
         40406 => 'Image not found',
+        40410 => 'Fonda not found',
+        40411 => 'Fonda group not found',
+        // CONFLICT
         40901 => 'Username exists',
         40902 => 'User\'s email exists',
         40903 => 'Account has actived',
         40905 => 'Location not belongs to user',
         40906 => 'Image not belongs to user',
+        40914 => 'Close time must be greater than open time',
+
 
     ];
 //    /**

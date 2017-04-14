@@ -83,7 +83,7 @@
 
             <dl class="dl-horizontal">
                 @foreach($routes as $route)
-                    <dt> <a href="/document/{{$route['name']}}"> {{$route['uri']}}</a> - {{$route['method']}}</dt>
+                    <dt> <a href="/document/{{$route['name']}}"> {{$route['name']}}</a> </dt>
                 @endforeach
             </dl>
 

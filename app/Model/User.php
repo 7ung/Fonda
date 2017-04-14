@@ -58,6 +58,11 @@ class User extends Model
         return $this->hasMany('App\Model\Image');
     }
 
+    public function user_role()
+    {
+        return $this->belongsTo('App\Model\UserRole');
+    }
+
     /**
      * @param $newPassword
      * @return bool

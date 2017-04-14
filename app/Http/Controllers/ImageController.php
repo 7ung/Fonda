@@ -12,7 +12,10 @@ namespace App\Http\Controllers;
 use App\Model\Image;
 use App\Model\User;
 use function Common\base64_to_jpeg;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\In;
 use Responses\ResponseBuilder;
 use Responses\ResponseJsonBadRequest;
@@ -88,7 +91,7 @@ class ImageController extends Controller
 
     public function delete(\Request $request, $userId, $imageId, User $user, Image $image)
     {
-        unlink($image->url);
+        \Illuminate\Support\Facades\File::delete($image->url);
         $image->delete();
         return ResponseBuilder::build(null, 200, 'Delete image successfully');
     }

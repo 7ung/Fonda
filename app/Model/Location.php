@@ -24,6 +24,11 @@ class Location extends Model
         return $this->belongsTo('App\Model\Profile');
     }
 
+    public function fonda()
+    {
+        return $this->belongsTo('App\Model\Fonda');
+    }
+
     public static function dummMany()
     {
        return Location::where('profile_id', '=', 10)->paginate(4)->toJson();

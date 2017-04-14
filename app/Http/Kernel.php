@@ -59,10 +59,36 @@ class Kernel extends HttpKernel
         //
         'auth_user' => \App\Http\Middleware\VerifyUserToken::class,
         'auth_token' => \App\Http\Middleware\VerifyToken::class,
+        /**
+         * Check input format
+         */
+        'validate_input' => \App\Http\Middleware\ResourcesMiddleware\ValidateInputFormat::class,
 
         // Resource Middleware
+        /**
+         * location_res => Assert can found location and parse location object to lower layer
+         *
+         * Must sure have USER from higher layer
+         */
         'location_res' => \App\Http\Middleware\ResourcesMiddleware\LocationResource::class,
+
+        /**
+         * Assert can found image and parse image object to lower layer
+         *
+         * Must sure have USER from higher layer
+         */
         'image_res' => \App\Http\Middleware\ResourcesMiddleware\ImageResource::class,
+
+        /**
+         *
+         */
+        'fonda_res' => \App\Http\Middleware\ResourcesMiddleware\FondaResource::class,
+
+        /**
+         * Assert user is Vendor Role
+         */
+        'auth_vendor' => \App\Http\Middleware\VendorUserRole::class,
+
 
     ];
 }

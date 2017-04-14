@@ -86,3 +86,20 @@ Route::group(['middleware' => 'auth_user'], function (){
     Route::delete('/users/{id}/image/{image_id}', 'ImageController@delete')->middleware('image_res');
 });
 
+/**
+ * Fonda
+ */
+
+Route::get('/fonda', 'FondaController@index');
+
+Route::get('/fonda/{id}', 'FondaController@show')->middleware(['fonda_res']);
+
+Route::post('/fonda', 'FondaController@store')
+    ->middleware(['auth_token', 'auth_vendor', 'validate_input']);
+
+Route::put('/fonda/{id}', 'FondaController@update')
+    ->middleware(['auth_token', 'auth_vendor', 'validate_input','fonda_res']);
+
+/**
+ * Update image for fonda
+ */
