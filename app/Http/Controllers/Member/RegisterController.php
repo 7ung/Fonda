@@ -59,7 +59,6 @@ class RegisterController extends Controller
             throw new MySqlExecuteFailException('Can not create user');
 
         $user = User::findByUsername($username);
-//        $rs = VerifyStatus::createByUserId($user->id);
 
 //        if ($rs == false)
 //            throw new MySqlExecuteFailException('Can not create verify status');

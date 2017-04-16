@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth_user'], function (){
 
 Route::group(['middleware' => 'auth_user'], function (){
 
-    Route::post('/users/{id}/image', 'ImageController@store');
+    Route::post('/users/{id}/image', 'ImageController@store')->middleware('validate_input');
 
     Route::get('/users/{id}/image', 'ImageController@index');
 
@@ -101,5 +101,36 @@ Route::put('/fonda/{id}', 'FondaController@update')
     ->middleware(['auth_token', 'auth_vendor', 'validate_input','fonda_res']);
 
 /**
- * Update image for fonda
+ * image for fonda
  */
+
+Route::resource('/fonda/{id}/image','FondaImageController',[
+    'only' => ['index', 'show', 'store', 'update', 'destroy']
+]);
+
+Route::resource('/fonda_group','FondaGroupController',[
+    'only' => ['index', 'store']
+]);
+
+Route::resource('/fonda/{id}/sale', 'SaleController');
+
+Route::resource('/utility', 'UtilityController',[
+    'only' => ['index', 'store']
+]);
+
+Route::resource('/fonda/{id}/utility','FondaUtilityController');
+
+Route::resource('/culinary','CulinaryController',[
+    'only' => ['index', 'store']
+]);
+
+Route::resource('/fonda/{id}/culinary','FondaCulinaryController');
+
+Route::resource('/users/{id}/comment','CommentController',
+    ['only' => ['store', 'update', 'destroy']]
+);
+
+Route::get('/fonda/{id}/comment', 'CommentController@index')->middleware('fonda_res');
+
+Route::resource('/fonda/{id}/dainty', 'FondaDaintyController');
+

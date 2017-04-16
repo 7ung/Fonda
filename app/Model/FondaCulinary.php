@@ -23,6 +23,8 @@ class FondaCulinary extends Model
 
     protected $hidden = ['culinary'];
 
+    public static $maxInFonda = 4;
+
     public function culinary()
     {
         return $this->belongsTo('App\Model\Culinary');

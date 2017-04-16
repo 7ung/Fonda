@@ -85,6 +85,31 @@ class Kernel extends HttpKernel
         'fonda_res' => \App\Http\Middleware\ResourcesMiddleware\FondaResource::class,
 
         /**
+         *
+         */
+        'fonda_image_res' => \App\Http\Middleware\ResourcesMiddleware\FondaImageResource::class,
+
+        /**
+         *
+         */
+        'fonda_sale_res' => \App\Http\Middleware\ResourcesMiddleware\SaleResource::class,
+
+        /**
+         *
+         */
+        'fonda_utility_res' => \App\Http\Middleware\ResourcesMiddleware\FondaUtilityResource::class,
+
+        /**
+         *
+         */
+        'fonda_culinary_res' => \App\Http\Middleware\ResourcesMiddleware\FondaCulinaryResource::class,
+
+        /*
+         *
+         */
+        'comment_res' => \App\Http\Middleware\ResourcesMiddleware\CommentResource::class,
+
+        /**
          * Assert user is Vendor Role
          */
         'auth_vendor' => \App\Http\Middleware\VendorUserRole::class,

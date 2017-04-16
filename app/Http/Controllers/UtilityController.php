@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Model\Utility;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Responses\ResponseBuilder;
+use Responses\ResponseJsonBadRequest;
+
+require_once __DIR__.'/../../Responses/_loader.php';
+require_once __DIR__.'/../../Exceptions/_loader.php';
+
+class UtilityController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return array
+     */
+    public function index()
+    {
+        $name = Input::get('name');
+        if (empty($name) == false)
+            $rs = Utility::leftJoin('fonda_utility', 'utility.id', '=', 'fonda_utility.utility_id')
+                ->selectRaw('utility.*, count(fonda_utility.fonda_id) as fonda_count')
+                ->where('utility.name', 'like', '%'.$name.'%')
+                ->groupBy('utility.id');
+
+        else
+            $rs = Utility::leftJoin('fonda_utility', 'utility.id', '=', 'fonda_utility.utility_id')
+                ->selectRaw('utility.*, count(fonda_utility.fonda_id) as fonda_count')
+                ->groupBy('utility.id');            // get all
+
+        $rs = $rs->orderBy('fonda_count', 'desc')        // Xếp theo thứ tự giảm dần số fonda
+        ->orderBy('name')                        // Xếp theo thứ tự tăng dần tên
+        ->take(Utility::numberToSelect)
+        ->get();
+
+        return ResponseBuilder::build($rs->toArray());
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function store(Request $request)
+    {
+        $name = Input::get('name');
+        if (empty($name) == false)
+            ResponseJsonBadRequest::responseBadRequest(40018);
+
+        $utility = new Utility();
+        $utility->name = $name;
+        $utility->save();
+        return ResponseBuilder::build($utility, 200, 'Create success');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

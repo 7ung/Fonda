@@ -43,10 +43,11 @@ class ImageController extends Controller
      */
     public function store(\Request $request, $userId, User $user)
     {
-
         $imageBase64 = Input::get('image_base64');
         if (empty($imageBase64))
             return ResponseJsonBadRequest::responseBadRequest(40007);
+
+//        $fileName = Image::upload($imageBase64, $userId);
 
         $userFolder = self::$imgPath.'/'.$user->id;
         if (is_dir($userFolder) == false)
@@ -62,10 +63,12 @@ class ImageController extends Controller
         $image->url = $fileName;
         $image->save();
 
+//        $userFolder =
         $newFileName = $userFolder.'/'.$image->id.'.jpg';
         rename($fileName, $newFileName);
 
         $image->url = \URL::to('/').'/storage/img/'.$user->id.'/'.$image->id.'.jpg';
+        $image->local_path = '/storage/img/'.$user->id.'/'.$image->id.'jpg';
         $image->save();
 
         return ResponseBuilder::build($image, 200, 'Upload file successfully');
@@ -79,6 +82,7 @@ class ImageController extends Controller
 
     public function show(\Request $request, $userId, $imageId, User $user, Image $image)
     {
+        $image->profile;
         return ResponseBuilder::build($image);
     }
 
@@ -91,7 +95,11 @@ class ImageController extends Controller
 
     public function delete(\Request $request, $userId, $imageId, User $user, Image $image)
     {
+        static $root = __DIR__.'/../../..';
         \Illuminate\Support\Facades\File::delete($image->url);
+        if ($image->profile != null){
+            return ResponseJsonBadRequest::responseBadRequest(40907);
+        }
         $image->delete();
         return ResponseBuilder::build(null, 200, 'Delete image successfully');
     }

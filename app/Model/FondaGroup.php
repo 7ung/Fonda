@@ -19,8 +19,24 @@ class FondaGroup extends Model
 
     public $jsonName = 'fonda_group';
 
+    public $appends = ['fonda_count'];
+
+    public static $numberToSelect = 8;
+
     public function fonda()
     {
-        return $this->hasMany('App\Model\Fonda');
+        return $this->hasMany('App\Model\Fonda', 'group_id', 'id');
+    }
+
+    public function getFondaCountAttribute()
+    {
+        return $this->fonda()->count();
+    }
+    public static function dumm()
+    {
+        $fondaGroup = new FondaGroup();
+        $fondaGroup->name = 'dumm name';
+        $fondaGroup->id = 0;
+        return $fondaGroup;
     }
 }

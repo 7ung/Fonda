@@ -15,17 +15,29 @@ class FondaUtility extends Model
 {
     protected $table = 'fonda_utility';
 
-    public $timestamps = false;
+//    protected $primaryKey = ['fonda_id', 'utility_id'];
 
     public $jsonName = 'fonda_utility';
 
+    public $timestamps = false;
+
+
     protected $appends = ['name'];
 
-    protected $hidden = ['utility'];
+    protected $hidden = ['utility', 'fonda'];
+
+    public $incrementing = false;
+
+    public static $maxInFonda = 8;
 
     public function utility()
     {
         return $this->belongsTo('App\Model\Utility');
+    }
+
+    public function fonda()
+    {
+        return $this->belongsTo('App\Model\Fonda');
     }
 
     public function getNameAttribute()

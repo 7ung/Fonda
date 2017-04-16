@@ -18,4 +18,13 @@ class Culinary extends Model
     public $timestamps = false;
 
     public $jsonName = 'culinary';
+
+    public static $numberToSelect = 8;
+
+    public function fonda()
+    {
+        return $this->belongsToMany('App\Model\Fonda', 'fonda_culinary', 'fonda_id','culinary_id');
+    }
+
+
 }

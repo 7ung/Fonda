@@ -62,15 +62,11 @@ class FondaController extends Controller
                $query->where('city', '=', $city);
             });
 
-        if (empty($isSale) == false && $isSale == 1)
-            $rs = $rs->whereHas('sales', function ($query) use ($city){
-                $query->where('is_active', '=', 1);
-            });
+        if ($isSale === '1')
+            $rs = $rs->has('sales');
 
-        if (empty($isSale) == false && $isSale == 0)
-            $rs = $rs->whereHas('sales', function ($query) use ($city){
-                $query->where('is_active', '=', 0);
-            });
+        if ( $isSale === '0')
+            $rs = $rs->doesntHave('sales');
 
         if (empty($culinaryId) == false)
             $rs = $rs->whereHas('culinaries', function ($query) use ($culinaryId){
@@ -119,9 +115,27 @@ class FondaController extends Controller
         if (empty($fonda->name))
             return ResponseJsonBadRequest::responseBadRequest(40010);
 
-        $fonda->group_id = Input::get('group_id');
-        if (empty($fonda->group_id))
-            return ResponseJsonBadRequest::responseBadRequest(40011);
+        // Nhập param là group name, nếu chưa có thì tạo một group với groụp_name
+        // nếu có rồi thì get group by group name
+        // nếu không có group name thì get group by group id
+        // nếu không có group id thì quăng lỗi
+        $groupName = Input::get('group_name');
+        if ($groupName == null){
+            $groupId = Input::get('group_id');
+            if (empty($groupId))
+                return ResponseJsonBadRequest::responseBadRequest(40011);
+            $group = FondaGroup::find($groupId);
+            if ($group == null)
+                return ResponseJsonBadRequest::responseBadRequest(40411);
+        }
+        else{
+            $group = FondaGroup::where('name', '=',$groupName)->first();
+            if ($group == null) {
+                $group = new FondaGroup();
+                $group->name = $groupName;
+            }
+        }
+
 
         $fonda->scale = Input::get('scale');
         if (empty($fonda->scale))
@@ -141,6 +155,7 @@ class FondaController extends Controller
         $open_date = Input::get('open_day');
         $fonda->open_day = $open_date;
 
+        $location = null;
         if (empty(Input::get('location')) == false)
         {
             $locationArray = explode(',',Input::get('location'));
@@ -155,13 +170,18 @@ class FondaController extends Controller
 
         try{
             DB::beginTransaction();
+            if ($group != null){
+                $group->save();
+            }
+
+            $fonda->group_id = $group->id;
             $fonda->save();
+            $fonda->group;
+
             if($location != null) {
                 $location->fonda_id = $fonda->id;
                 $location->save();
             }
-            $fonda->group;
-            $fonda->location->makeHidden(['profile_id']);
             DB::commit();
             return ResponseBuilder::build($fonda);
         }

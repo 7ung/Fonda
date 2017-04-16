@@ -63,6 +63,15 @@ class User extends Model
         return $this->belongsTo('App\Model\UserRole');
     }
 
+    public function fonda()
+    {
+        return $this->hasMany('App\Model\Fonda');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Model\Comment');
+    }
     /**
      * @param $newPassword
      * @return bool
@@ -121,6 +130,7 @@ class User extends Model
             $user->save();
             VerifyStatus::createByUserId($user->id);
             Profile::createByUser($user);
+//            Image::createDefault($user->id);
             DB::commit();
             return true;
         }

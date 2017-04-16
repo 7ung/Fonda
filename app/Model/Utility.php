@@ -18,4 +18,11 @@ class Utility extends Model
     public $timestamps = false;
 
     public $jsonName = 'utility';
+
+    public static $numberToSelect = 8;
+
+    public function fonda()
+    {
+        return $this->belongsToMany('App\Model\Fonda', 'fonda_utility', 'fonda_id', 'utility_id');
+    }
 }

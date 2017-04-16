@@ -14,6 +14,7 @@ use Closure;
 use Responses\ResponseJsonBadRequest;
 
 require_once __DIR__.'/../../Responses/_loader.php';
+require_once __DIR__.'/../../Common/_loader.php';
 
 class VerifyToken
 {

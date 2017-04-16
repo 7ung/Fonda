@@ -18,4 +18,8 @@ class Comment extends Model
     public $timestamps = false;
 
     public $jsonName = 'comment';
+
+    public static $paging = 12;
+
+
 }

@@ -33,9 +33,7 @@ class FondaResource
         if ($user != null && $user->id != $fonda->user->id)
             return response()->json(ResponseJsonBadRequest::responseBadRequest(40311));
 
-
         $request->route()->setParameter('fonda', $fonda);
         return $next($request);
-
     }
 }

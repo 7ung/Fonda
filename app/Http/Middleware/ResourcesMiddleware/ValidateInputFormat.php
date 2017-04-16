@@ -89,6 +89,25 @@ class ValidateInputFormat
         if (empty($openDay) != false && $openDay >= 128)
             return response()->json(ResponseJsonBadRequest::responseBadRequest(40016));
 
+        $image_base64 = Input::get('image_base64');
+        if (empty($image_base64) == false && starts_with($image_base64, 'data:image/jpeg;base64,') == false)
+            return response()->json(ResponseJsonBadRequest::responseBadRequest(40008));
+
+        /**
+         * begin_day - end_day
+         */
+        $beginDayString = Input::get('begin_day');
+        $endDayString = Input::get('end_day');
+
+        $beginDay = strtotime($beginDayString);
+        $endDay = strtotime($endDayString);
+        if ($beginDayString != null && $endDayString != null) {
+            if ($beginDay == false || $endDay == false)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40024));
+            if ($beginDay > $endDay)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40924));
+        }
+
         return $next($request);
 
 

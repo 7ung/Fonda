@@ -13,11 +13,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    protected $table = 'user';
+    protected $table = 'sale';
 
     public $timestamps = false;
 
-    public $jsonName = 'user';
+    public $jsonName = 'sale';
 
+    public static $maxInFonda = 4;
+
+    protected $hidden = ['fonda'];
+
+    public function fonda()
+    {
+        return $this->belongsTo('App\Model\Fonda');
+    }
+
+    public static function dumm()
+    {
+        return Fonda::find(2);
+    }
 
 }

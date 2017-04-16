@@ -23,6 +23,8 @@ class ImageFonda extends Model
 
     protected $hidden = ['img'];
 
+    protected $primaryKey = 'image_id';
+
     public function img()
     {
         return $this->belongsTo('App\Model\Image', 'image_id', 'id');
@@ -46,5 +48,15 @@ class ImageFonda extends Model
     public function getUserIdAttribute()
     {
         return $this->img->user_id;
+    }
+
+    public static function dumm()
+    {
+        return ImageFonda::find(6);
+    }
+
+    public static function dummMany()
+    {
+        return ImageFonda::paginate(4)->toJson();
     }
 }

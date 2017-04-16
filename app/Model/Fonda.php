@@ -63,16 +63,17 @@ class Fonda extends Model
     {
         return $this->belongsToMany('App\Model\Dainty', 'fonda_dainty', 'fonda_id', 'dainty_id');
     }
-//
-//    public function sales()
-//    {
-//        return $this->hasMany('App\Model\Sale');
-//    }
+
+    public function sales()
+    {
+        return $this->hasMany('App\Model\Sale');
+    }
 
     public function getCommentCountAttribute()
     {
         return count($this->comments);
     }
+
 
     public function getFeatureImageAttribute()
     {

@@ -19,6 +19,8 @@ class Location extends Model
 
     public $jsonName = 'location';
 
+    protected $hidden = ['profile_id'];
+
     public function profile()
     {
         return $this->belongsTo('App\Model\Profile');

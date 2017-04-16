@@ -8,6 +8,8 @@
 
 namespace Common;
 
+use Illuminate\Support\Facades\File;
+
 require_once 'Hashing.php';
 
 /**
@@ -35,7 +37,6 @@ function base64_to_jpeg($base64_string, $output_file) {
     $data = explode(',', $base64_string);
     fwrite($ifp, base64_decode($data[1]));
     fclose($ifp);
-
     return $output_file;
 }
 
