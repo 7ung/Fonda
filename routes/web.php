@@ -47,7 +47,7 @@ Route::post('/update_password', 'Member\ResendPasswordController@update')->middl
 
 Route::get('/users/{id}/profile', 'Member\ProfileController@view');
 Route::put('/users/{id}/profile', 'Member\ProfileController@update')->middleware('auth_user');
-
+Route::post('/users/profile', 'Member\ProfileController@getByToken')->middleware('auth_token');
 
 
 /**
@@ -95,10 +95,10 @@ Route::get('/fonda', 'FondaController@index');
 Route::get('/fonda/{id}', 'FondaController@show')->middleware(['fonda_res']);
 
 Route::post('/fonda', 'FondaController@store')
-    ->middleware(['auth_token', 'auth_vendor', 'validate_input']);
+    ->middleware(['auth_token', 'validate_input']);
 
 Route::put('/fonda/{id}', 'FondaController@update')
-    ->middleware(['auth_token', 'auth_vendor', 'validate_input','fonda_res']);
+    ->middleware(['auth_token',  'validate_input','fonda_res']);
 
 /**
  * image for fonda

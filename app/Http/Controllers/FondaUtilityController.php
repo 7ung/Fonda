@@ -15,14 +15,26 @@ use Responses\ResponseJsonBadRequest;
 require_once __DIR__.'/../../Responses/_loader.php';
 require_once __DIR__.'/../../Exceptions/_loader.php';
 
+/**
+ * Class FondaUtilityController
+ * resource controller: HOST/fonda/{id}/utility/{u_id}
+ * @package App\Http\Controllers
+ */
 class FondaUtilityController extends Controller
 {
+
     function __construct()
     {
+        // 40300
         $this->middleware('auth_token', ['except' => ['index','show']]);
-        $this->middleware('auth_vendor', ['except' => ['index','show']]);
+//        $this->middleware('auth_vendor', ['except' => ['index','show']]);
+        // nothing
         $this->middleware('validate_input', ['only' => ['store', 'update']]);
+        // 40410
+        // 40311
         $this->middleware('fonda_res');
+
+        // 40415
         $this->middleware('fonda_utility_res', ['except' => ['index', 'store']]);
     }
 
@@ -64,6 +76,8 @@ class FondaUtilityController extends Controller
         $utilityName = Input::get('utility_name');
         $utilityId = Input::get('utility_id');
         if ($utilityName != null){
+            // nếu tên được gửi lên từ client chưa tồn tại thì tạo utility mới.
+            // nếu đã tồn tại thì load utility theo tên
             $utility = Utility::where('name','=',$utilityName)->first();
             if ($utility == null){
                 $utility = new Utility();
@@ -73,7 +87,7 @@ class FondaUtilityController extends Controller
         }
         else {
             if ($utilityId == null)
-                return ResponseJsonBadRequest::responseBadRequest(40016);
+                return ResponseJsonBadRequest::responseBadRequest(40025);
             $utility = Utility::find($utilityId);
             if ($utility == null)
                 return ResponseJsonBadRequest::responseBadRequest(40415);
@@ -96,8 +110,12 @@ class FondaUtilityController extends Controller
             $fondaUtility->save();
             DB::commit();
 //            $fondaUtility->utility;
-            return ResponseBuilder::build($fondaUtility, 200, 'Create success');
-        }catch (QueryException $queryException){
+            // trả về danh sách utils của fonda theo fonda_id
+            ////////
+            $utilsFonda = FondaUtility::where('fonda_id', '=', $fondaUtility->fonda_id)->get();
+            return ResponseBuilder::build($utilsFonda->toArray(), 200, 'Create success');
+        }
+        catch (QueryException $queryException){
             DB::rollBack();
             throw new MySqlExecuteFailException($queryException->getMessage());
         }

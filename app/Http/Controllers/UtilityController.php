@@ -34,7 +34,7 @@ class UtilityController extends Controller
 
         $rs = $rs->orderBy('fonda_count', 'desc')        // Xếp theo thứ tự giảm dần số fonda
         ->orderBy('name')                        // Xếp theo thứ tự tăng dần tên
-        ->take(Utility::numberToSelect)
+        ->take(Utility::$numberToSelect)
         ->get();
 
         return ResponseBuilder::build($rs->toArray());

@@ -74,6 +74,7 @@ class LocationController extends Controller
         $longitude = \Request::input('longitude');
         $latitude = \Request::input('latitude');
         $city = \Request::input('city');
+        $address = \Request::input('address');
 
         /**
          *
@@ -92,6 +93,7 @@ class LocationController extends Controller
         $location->latitude = $latitude;
         $location->city = $city;
         $location->profile_id = $user->profile->id;
+        $location->address = $address;
 
         $location->save();
         return ResponseBuilder::build($location, 200, 'Create location successfully');

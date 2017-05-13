@@ -63,7 +63,8 @@ class ResponseBuilder
             return $responseJsonArray;
 
         if ($data instanceof Model){
-            $responseJsonArray[$data->jsonName] = $data;
+//            $responseJsonArray[$data->jsonName] = $data;
+            $responseJsonArray["data"] = $data;
         } else if (is_array($data) && empty($data) == false) {
             $responseJsonArray['collections'] = $data;
         } else if ($data instanceof ResponseJsonError ) {

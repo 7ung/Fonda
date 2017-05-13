@@ -36,14 +36,15 @@ class FondaController extends Controller
         $groupName = Input::get('group_name');
         $scale = Input::get('scale');
         $city = Input::get('city');
+        $address = Input::get('address');
         $isSale = Input::get('is_sale');
         $culinaryId = Input::get('culinary_id');
         $daintyName = Input::get('dainty_name');
 
         // basically, return all active fonda
         $rs = Fonda::where('active', '=',1)
-            ->with(['group', 'location','utilities','culinaries'])
-            ->orderBy('id', 'desc');
+            ->with(['group', 'location','utilities','culinaries', 'sales'])
+            ->orderBy('date', 'desc');
 
         // Tìm kiếm theo tên
         if (empty($name) == false)
@@ -62,6 +63,11 @@ class FondaController extends Controller
                $query->where('city', '=', $city);
             });
 
+        if (empty($address) == false)
+            $rs = $rs->whereHas('location', function ($query) use ($address){
+                $query->where('address', 'like', '%'.$address.'%');
+            });
+
         if ($isSale === '1')
             $rs = $rs->has('sales');
 
@@ -78,7 +84,8 @@ class FondaController extends Controller
                 $query->where('name', 'LIKE', '%'.$daintyName.'%');
             });
 
-        $rs = $rs->paginate(4)->toArray();
+        $rs = $rs
+			->paginate(4)->toArray();
         return ResponseBuilder::build($rs);
     }
 
@@ -88,6 +95,7 @@ class FondaController extends Controller
         $fonda->location;
         $fonda->utilities;
         $fonda->culinaries;
+		$fonda->sales;
         return ResponseBuilder::build($fonda);
     }
 
@@ -161,13 +169,22 @@ class FondaController extends Controller
             $locationArray = explode(',',Input::get('location'));
             if (count($locationArray) != 0) {
                 $location = new Location();
-                $location->longitude = $locationArray[0];
-                $location->latitude = $locationArray[1];
-                if (count($locationArray) == 3)
-                    $location->city = $locationArray[2];
+                $location->longitude = $locationArray[1];
+                $location->latitude = $locationArray[0];
+
+                $location->city = Input::get('city');
+                $location->province = Input::get('province');
+                $location->place_id = Input::get('place_id');
             }
         }
 
+        $address = Input::get('address');
+        if (empty($address) == false && $location != null){
+            $location->address = $address;
+        }
+
+        $fonda->description = Input::get('description');
+        $fonda->date = $_SERVER['REQUEST_TIME'];
         try{
             DB::beginTransaction();
             if ($group != null){
@@ -209,9 +226,13 @@ class FondaController extends Controller
 
         $openTimeString = Input::get('open_time');
         $closeTimeString = Input::get('close_time');
-        if (empty($openTimeString) == false && empty($closeTimeString) == false)
+        //if (empty($openTimeString) == false && empty($closeTimeString) == false)
+        if (empty($openTimeString) == false)
         {
             $fonda->open_time = $openTimeString;
+        }
+        if (empty($closeTimeString) == false)
+        {
             $fonda->close_time = $closeTimeString;
         }
 
@@ -224,23 +245,31 @@ class FondaController extends Controller
             $fonda->phone_2 = $phone_2;
 
         $active = Input::get('active');
-        if (empty($active))
+        if (empty($active) == false)
             $fonda->active = $active;
 
         $openDay = Input::get('open_day');
-        if (empty($openDay))
+        if (empty($openDay) == false)
             $fonda->open_day = $openDay;
 
         if (empty(Input::get('location')) == false)
         {
             $locationArray = explode(',',Input::get('location'));
             if (count($locationArray) != 0) {
-                $fonda->location->longitude = $locationArray[0];
-                $fonda->location->latitude = $locationArray[1];
-                if (count($locationArray) == 3)
-                    $fonda->location->city = $locationArray[2];
+                $fonda->location->longitude = $locationArray[1];
+                $fonda->location->latitude = $locationArray[0];
             }
         }
+        if (Input::get('city') != '')
+            $fonda->location->city = Input::get('city');
+        if (Input::get('address') != '')
+            $fonda->location->address = Input::get('address');
+        if (Input::get('province') != '')
+            $fonda->location->province = Input::get('province');
+        if (Input::get('place_id') != '')
+            $fonda->location->place_id = Input::get('place_id');
+        if (Input::get('description') != '')
+            $fonda->description = Input::get('description');
 
         try{
             DB::beginTransaction();
@@ -248,6 +277,13 @@ class FondaController extends Controller
             $fonda->save();
             $fonda->location->makeHidden(['profile_id']);
             DB::commit();
+
+            $fonda = Fonda::find($fonda->id);
+            $fonda->group;
+            $fonda->location;
+            $fonda->utilities;
+            $fonda->culinaries;
+            $fonda->sales;
             return ResponseBuilder::build($fonda, 200, 'Update success');
         }
         catch(QueryException $queryException)

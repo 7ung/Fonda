@@ -54,12 +54,16 @@ class ValidateInputFormat
         $closeTimeString = Input::get('close_time');
         $close_time = strtotime($closeTimeString);
         // openTimeStrong != null vì khôgn require open_time
-        if ($openTimeString != null && $open_time == false)
-            return response()->json(ResponseJsonBadRequest::responseBadRequest(40014));
-        if ($closeTimeString != null && $close_time == false)
-            return response()->json(ResponseJsonBadRequest::responseBadRequest(40014));
-        if ($close_time < $open_time)
-            return response()->json(ResponseJsonBadRequest::responseBadRequest(40914));
+        if (false){
+            // comment out
+            if ($openTimeString != null && $open_time == false)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40014));
+            if ($closeTimeString != null && $close_time == false)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40014));
+            if ($close_time < $open_time)
+                return response()->json(ResponseJsonBadRequest::responseBadRequest(40914));
+        }
+
 
         /**
          * active

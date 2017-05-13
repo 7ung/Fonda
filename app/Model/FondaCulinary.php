@@ -19,9 +19,9 @@ class FondaCulinary extends Model
 
     public $jsonName = 'fonda_culinary';
 
-    protected $appends = ['name'];
+    protected $appends = ['id', 'name'];
 
-    protected $hidden = ['culinary'];
+    protected $hidden = ['culinary', 'fonda', 'culinary_id'];
 
     public static $maxInFonda = 4;
 
@@ -29,6 +29,11 @@ class FondaCulinary extends Model
     {
         return $this->belongsTo('App\Model\Culinary');
     }
+	
+	public function getIdAttribute()
+	{
+		return $this->culinary->id;
+	}
 
     public function getNameAttribute()
     {

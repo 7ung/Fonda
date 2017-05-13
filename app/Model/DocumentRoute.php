@@ -176,6 +176,21 @@ DocumentRoute::route('Get user profile', '/users/{id}/profile', 'GET',
     ]
 );
 
+DocumentRoute::route('Get user profile by Token', '/users/profile', 'POST',
+    // params
+    [
+        ['token', 'required', 'token'],
+    ],
+    // Description
+    'Lấy thông tin cá nhân của người dùng theo token',
+    // Sucess Response
+    Profile::dumm(),
+    // Error Response
+    [
+        [40403, 'Sai user id'],
+    ]
+);
+
 
 DocumentRoute::route('Update user profile', '/users/{id}/profile', 'PUT',
     // params
@@ -225,6 +240,7 @@ DocumentRoute::route('Create location', '/users/{id}/location', 'POST',
         ['longitude', 'required', 'Kinh độ'],
         ['latitude', 'required', 'Vĩ độ'],
         ['city', 'non-required', 'Tên thành phố'],
+        ['address', 'non-required', 'Địa chỉ cụ thể']
 
     ],
     // Description
@@ -419,7 +435,8 @@ DocumentRoute::route('Create Fonda', '/fonda', 'POST',
         ['open_day','non-required', 'Ngày mở cửa trong tuần. Giá trị <= 127  (127 = bx1111111)'],
         ['phone_1', 'non-required', 'Số điện thoại fonda'],
         ['phone_2', 'non-required', 'Số điện thoại fonda'],
-        ['location', 'non-required', 'Địa điểm của fonda, format: longitude,latitude,city hoặc longitude,latitude (city không required, dùng dấu "," làm phân cách)']
+        ['location', 'non-required', 'Địa điểm của fonda, format: longitude,latitude,city hoặc longitude,latitude (city không required, dùng dấu "," làm phân cách)'],
+        ['address', 'non-required', 'Đại chỉ của fonda. Không cótác dụng nếu không có location']
     ],
     // Description
     'Tạo một cửa hàng',
@@ -503,7 +520,8 @@ DocumentRoute::route('GET list Fonda', '/fonda', 'GET',
         ['name', 'non-required', 'Tên của fonda'],
         ['group_name', 'non-required', 'Tên Nhóm Fonda'],
         ['scale', 'non-required', 'Quy mô của fonda, nhận giá trị 1, 2, 3'],
-        ['city', 'non-required', 'Tên thành phố'],
+        ['city', 'non-required', 'Tên thành phố (so sánh chính xác)'],
+        ['address', 'non-required', 'Địa chỉ (nếu có chứa)'],
         ['is_sale', 'non-required', 'Có khuyến mại hay không 0 hoặc 1'],
         ['culirary_id', 'non-required', 'Id của nhóm ẩm thực'],
         ['dainty', 'non-required', 'Tên món'],
@@ -578,7 +596,7 @@ DocumentRoute::route('Update image of fonda', '/fonda/{id}/image/{image_id}', 'P
     // params
     [
         ['id', 'required (query)', 'Fonda id'], // midw - fonda_res
-        ['image_id', 'required (query)'],
+        ['image_id', 'required (query)', 'image id'],
         ['token', 'required', 'Mã xác thực tài khoản'],
         ['description', 'non-required', 'Nội dung mô tả'],
     ],
@@ -600,7 +618,7 @@ DocumentRoute::route('Delete image of fonda', '/fonda/{id}/image/{image_id}', 'D
     // params
     [
         ['id', 'required (query)', 'Fonda id'], // midw - fonda_res
-        ['image_id', 'required (query)'],
+        ['image_id', 'required (query)', 'image id'],
         ['token', 'required', 'Mã xác thực tài khoản'],
     ],
     // Description
@@ -693,10 +711,10 @@ DocumentRoute::route('Create utility', '/utility', 'POST',
     ]
 );
 
-DocumentRoute::route('Create fonda utility', '/fonda/{id}/utility', 'GET',
+DocumentRoute::route('Get list fonda utility', '/fonda/{id}/utility', 'GET',
     [
     ],
-    'Lấy một list utility',
+    'Get list fonda utility',
     '....',
     [
     ]
@@ -706,12 +724,13 @@ DocumentRoute::route('Get single utility', '/fonda/{id}/utility/{utility_id}', '
     [
     ],
     'Lấy một  utility',
-    '....',
+    'Danh sách utility theo fonda-id (collections)',
     [
+
     ]
 );
 
-DocumentRoute::route('Create  utility', '/fonda/{id}/utility', 'POST',
+DocumentRoute::route('Create utility', '/fonda/{id}/utility', 'POST',
     [
         ['utility_name','non-required', 'Tên của utility mới'],
         ['utility_id','required', 'Id của utility đã tồn tại. Required nếu không có utility name'],
@@ -720,6 +739,9 @@ DocumentRoute::route('Create  utility', '/fonda/{id}/utility', 'POST',
     'Tạo một  utility',
     '....',
     [
+        [40300, 'Sai token '],
+        [40410, 'Không tìm thấy fonda'],
+        [40311, 'User không có quyền truy cập']
     ]
 );
 

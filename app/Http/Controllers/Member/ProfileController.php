@@ -96,4 +96,9 @@ class ProfileController extends Controller
 
         return ResponseBuilder::build($profile);
     }
+
+    public function getByToken(\Request $request, User $user){
+        $profile = Profile::with(['image', 'location'])->where('user_id', '=', $user->id)->first();
+        return ResponseBuilder::build($profile);
+    }
 }

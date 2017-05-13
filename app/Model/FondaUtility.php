@@ -22,9 +22,9 @@ class FondaUtility extends Model
     public $timestamps = false;
 
 
-    protected $appends = ['name'];
+    protected $appends = ['id', 'name'];
 
-    protected $hidden = ['utility', 'fonda'];
+    protected $hidden = ['utility', 'fonda', 'utility_id'];
 
     public $incrementing = false;
 
@@ -39,6 +39,11 @@ class FondaUtility extends Model
     {
         return $this->belongsTo('App\Model\Fonda');
     }
+	
+	public function getIdAttribute()
+	{
+		return $this->utility->id;
+	}
 
     public function getNameAttribute()
     {
