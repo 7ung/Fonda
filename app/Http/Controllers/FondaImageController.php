@@ -40,7 +40,7 @@ class FondaImageController extends Controller
     {
         $fonda = Route::current()->parameter('fonda');
         $images = $fonda->images()->paginate(self::$paging);
-        return ResponseBuilder::build($images->toArray());
+        return ResponseBuilder::build($images);
     }
 
     /**

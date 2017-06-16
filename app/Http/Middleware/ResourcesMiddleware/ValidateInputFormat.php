@@ -78,13 +78,13 @@ class ValidateInputFormat
          * location
          */
 
-        if (empty(Input::get('location')) == false)
-        {
-            $locationArray = explode(',',Input::get('location'));
-            if (count($locationArray) !== 2 && count($locationArray) !== 3 )
-                return response()->json(ResponseJsonBadRequest::responseBadRequest(40015));
-
-        }
+//        if (empty(Input::get('location')) == false)
+//        {
+//            $locationArray = explode(',',Input::get('location'));
+//            if (count($locationArray) !== 2 && count($locationArray) !== 3 )
+//                return response()->json(ResponseJsonBadRequest::responseBadRequest(40015));
+//
+//        }
 
         /**
          * open_day

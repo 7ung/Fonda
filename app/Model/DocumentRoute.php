@@ -754,7 +754,7 @@ DocumentRoute::route('Delete single utility', '/fonda/{id}/utility/{utility_id}'
     ]
 );
 
-DocumentRoute::route('Update single utility', '/fonda/{id}/utility/{utility_id}', 'UPDATE',
+DocumentRoute::route('Update single utility', '/fonda/{id}/utility/{utility_id}', 'PUT',
     [
         ['description','non-required', ''],
     ],

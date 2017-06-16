@@ -41,10 +41,37 @@ class FondaController extends Controller
         $culinaryId = Input::get('culinary_id');
         $daintyName = Input::get('dainty_name');
 
-        // basically, return all active fonda
-        $rs = Fonda::where('active', '=',1)
-            ->with(['group', 'location','utilities','culinaries', 'sales'])
-            ->orderBy('date', 'desc');
+        $location_array = explode(',',Input::get('location'));
+        $location =  null;
+        if (empty(Input::get('location')) == false) {
+            $location = new Location();
+            $location->longitude = floatval($location_array[1]);
+            $location->latitude  = floatval($location_array[0]);
+        }
+
+        $rs = null;
+        if ($location != null) {
+            $rs = Fonda::leftJoin('location', 'fonda.id', '=', 'location.fonda_id')
+                ->selectRaw('fonda.*,  ((location.longitude - ?) * (location.longitude - ?) + (location.latitude - ?) * (location.latitude - ?))  as distance ',
+                    [$location->longitude, $location->longitude, $location->latitude, $location->latitude])
+                ->groupBy('fonda.id');
+
+            $rs = $rs->orderBy('distance', 'asc');
+
+
+//            $rs = $rs
+//                ->paginate(4);
+//            return ResponseBuilder::build($rs);
+        }
+
+        if ($rs == null)
+            $rs = Fonda::where('active', '=',1)
+                ->with(['group', 'location','utilities','culinaries', 'sales'])
+                ->orderBy('date', 'desc');
+        else
+            $rs = $rs->where('active', '=',1)
+                ->with(['group', 'location','utilities','culinaries', 'sales'])
+                ->orderBy('date', 'desc');
 
         // Tìm kiếm theo tên
         if (empty($name) == false)
@@ -84,8 +111,11 @@ class FondaController extends Controller
                 $query->where('name', 'LIKE', '%'.$daintyName.'%');
             });
 
+//        // location from request param
+
+
         $rs = $rs
-			->paginate(4)->toArray();
+			->paginate(4);
         return ResponseBuilder::build($rs);
     }
 

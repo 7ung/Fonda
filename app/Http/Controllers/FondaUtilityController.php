@@ -165,7 +165,9 @@ class FondaUtilityController extends Controller
             ->take(1)
             ->update(['description' => Input::get('description')]);
 
-        return ResponseBuilder::build($fondaUtility, 200, 'Update success');
+        $utilsFonda = FondaUtility::where('fonda_id', '=', $fondaUtility->fonda_id)->get();
+        return ResponseBuilder::build($utilsFonda->toArray(), 200, 'Update success');
+
     }
 
     /**
@@ -177,7 +179,15 @@ class FondaUtilityController extends Controller
     public function destroy($id)
     {
         $fondaUtility = \Route::current()->fonda_utility;
-        $fondaUtility->delete();
-        return ResponseBuilder::build(null, 200, 'Detele success');
+//        $fondaUtility->delete();
+        $fonda = \Route::current()->fonda;
+//        $fonda->utilities()->detach($fondaUtility->utility_id);
+
+        DB::table('fonda_utility')->where('fonda_id', $fonda->id)
+            ->where('utility_id', $fondaUtility->utility_id)->delete();
+
+        $utilsFonda = FondaUtility::where('fonda_id', '=', $fondaUtility->fonda_id)->get();
+
+        return ResponseBuilder::build($utilsFonda->toArray(), 200, 'Detele success');
     }
 }

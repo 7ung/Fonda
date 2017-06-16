@@ -72,6 +72,10 @@ class ResponseBuilder
         } else if ($data instanceof ResponseJsonBadRequest){
             $responseJsonArray['error'] = $data->serializableArray();
         }
+        //
+        else {
+            $responseJsonArray["data"] = $data;
+        }
         return $responseJsonArray;
 
     }
